@@ -7,9 +7,13 @@ node_js:
 # so tables don't turn out nice
 # install a recent version locally
 before_install:
-  - npm i -g npm@version-number
+  - npm i -g npm@4
   - wget https://github.com/jgm/pandoc/releases/download/1.19.2.1/pandoc-1.19.2.1-1-amd64.deb
   - ar p pandoc-1.19.2.1-1-amd64.deb data.tar.gz | tar zx ./usr/bin/pandoc --strip-components 3
+
+install:
+  - cd App/
+  - npm install
 
 # pandoc needs LaTeX for pdf output
 # here the versions from the package system are ok
