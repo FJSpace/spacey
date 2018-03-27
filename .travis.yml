@@ -1,4 +1,7 @@
 language: node_js # not really, but using make
+node_js:
+  - "iojs"
+  - "4"
 
 # pandoc is used to generate the output files
 # the pandoc version in the package management system is a tad old though
@@ -19,6 +22,7 @@ addons:
 # the build step, details in the Makefile
 script:
   PANDOC=./pandoc make all
+  npm test
 
 # for tagged versions, deploy the built files to github
 deploy:
