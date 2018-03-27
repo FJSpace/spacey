@@ -1,6 +1,6 @@
 language: node_js # not really, but using make
 node_js:
-  - "4"
+  - "7"
 
 # pandoc is used to generate the output files
 # the pandoc version in the package management system is a tad old though
