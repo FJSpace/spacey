@@ -1,4 +1,4 @@
-language: c # not really, but using make
+language: node_js # not really, but using make
 
 # pandoc is used to generate the output files
 # the pandoc version in the package management system is a tad old though
