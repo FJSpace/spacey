@@ -1,6 +1,5 @@
 language: node_js # not really, but using make
 node_js:
-  - "iojs"
   - "4"
 
 # pandoc is used to generate the output files
@@ -8,6 +7,7 @@ node_js:
 # so tables don't turn out nice
 # install a recent version locally
 before_install:
+  - npm i -g npm@version-number
   - wget https://github.com/jgm/pandoc/releases/download/1.19.2.1/pandoc-1.19.2.1-1-amd64.deb
   - ar p pandoc-1.19.2.1-1-amd64.deb data.tar.gz | tar zx ./usr/bin/pandoc --strip-components 3
 
