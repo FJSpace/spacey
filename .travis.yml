@@ -21,7 +21,7 @@ addons:
 
 # the build step, details in the Makefile
 script:
-  PANDOC=./pandoc make all
+#  PANDOC=./pandoc make all
   npm test
 
 # for tagged versions, deploy the built files to github
