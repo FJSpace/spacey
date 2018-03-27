@@ -39,3 +39,7 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+
+notifications:
+  slack: spaceyteam1:H0OzeptQsUJ1pibYiiUDe8K4#travis
+
