@@ -2,6 +2,10 @@ language: node_js # not really, but using make
 node_js:
   - "7"
 
+branches:
+  only:
+  - master
+  
 # pandoc is used to generate the output files
 # the pandoc version in the package management system is a tad old though
 # so tables don't turn out nice
@@ -42,4 +46,3 @@ deploy:
 
 notifications:
   slack: spaceyteam1:H0OzeptQsUJ1pibYiiUDe8K4#travis
-
