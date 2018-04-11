@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button} from "react-native";
-import Equation from '../Model/Equation.js';
 
 export default class DetailPage extends React.Component {
 
@@ -68,7 +67,9 @@ export default class DetailPage extends React.Component {
 
     for(let i = 0; i < this.state.parameterArray.length; i++){
 
-      if(i == this.state.parameterArray.length-1) {
+      if(this.state.parameterArray.length == 1) { // One parameter
+        calculateResult += this.state.parameterArray[i] + this.equation.expressions[i]
+      } else if (i == this.state.parameterArray.length-1) { // Check if the last parameter, then don't add an expression
         calculateResult += this.state.parameterArray[i]
       } else {
         calculateResult += this.state.parameterArray[i] + this.equation.expressions[i]
