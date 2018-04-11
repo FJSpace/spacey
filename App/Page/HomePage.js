@@ -15,9 +15,9 @@ export default class HomePage extends React.Component {
   constructor(props) {
     super(props);
 
-    var eq1 = new Equation(1, "Momentum", "Calclate momentum", "p = m * v")
-    var eq2 = new Equation(2, "Force", "May the force be with you", "F = dp * dt")
-    var eq3 = new Equation(3, "Velocity", "WoW", "v = dr / dt")
+    var eq1 = new Equation(1, "Momentum", "Calclate momentum", "p = m * v", ["m", "v"], ["*"])
+    var eq2 = new Equation(2, "Force", "May the force be with you", "F = dp * dt / dv", ["dp", "dt", "dv"], ["*", "/"])
+    var eq3 = new Equation(3, "Velocity", "WoW", "v = dr / dt", ["dr", "dt"], ["/"])
 
     this.equations = [eq1, eq2, eq3]
   }
