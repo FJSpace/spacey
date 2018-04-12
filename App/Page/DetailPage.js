@@ -24,14 +24,14 @@ export default class DetailPage extends React.Component {
     let parameters = [];
     for(let i = 0; i < this.equation.parameters.length; i++){
       parameters.push(
-        <View>
+        <View key={i}>
           <View style = {{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
             paddingTop: 10,
             paddingBottom: 10
-          }} key={i}>
+          }}>
             <Text style={{
               flex: 1,
               fontSize: 20,
@@ -51,7 +51,7 @@ export default class DetailPage extends React.Component {
             />
           </View>
           {!!this.state.parametersValidation[i] && (
-            <Text style={{color: 'red'}}>{this.state.parametersValidation[i]}</Text>
+            <Text style={{color: 'red', textAlign: 'right', marginRight: '10%'}}>{this.state.parametersValidation[i]}</Text>
           )}
         </View>)
     }
@@ -59,7 +59,7 @@ export default class DetailPage extends React.Component {
     return (
       <View>
         <Text style = {{
-          marginLeft: '5%',
+          textAlign: 'center',
           fontSize: 20,
           paddingTop: 30,
           paddingBottom: 10
@@ -77,7 +77,10 @@ export default class DetailPage extends React.Component {
           {parameters}
         </View>
 
-        <Text>{this.state.calculateResult}</Text>
+        <Text style={{
+          fontSize: 20,
+          marginLeft: '5%'
+        }}>{this.state.calculateResult}</Text>
 
         <Button
           onPress={ () => this.onCalculatePress()}
