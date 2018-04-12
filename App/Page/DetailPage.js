@@ -40,7 +40,7 @@ export default class DetailPage extends React.Component {
             <TextInput
               style={{
                 height: 40,
-                borderColor: 'gray',
+                borderColor: (!this.state.parametersValidation[i] ? 'gray' : 'red'),
                 borderWidth: 1,
                 flex: 3,
                 marginRight: '20%'
@@ -97,7 +97,7 @@ export default class DetailPage extends React.Component {
 
     if (parameterArray[index] === "") { // Empty
       parametersValidation[index] = "Required field."
-    } else if (!(/^\d+$/.test(parameterArray[index]))){ // Number check.
+    } else if (!this.isNumeric(parameterArray[index])) { // Number check.
       parametersValidation[index] = "Only numbers."
     } else {
       parametersValidation[index] = ""
@@ -168,6 +168,10 @@ export default class DetailPage extends React.Component {
     })
 
     return bool
+  }
+
+  isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
   }
 
 }
