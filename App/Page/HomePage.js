@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { View, Text, FlatList, ActivityIndicator, Dimensions } from "react-native";
 import { List, ListItem, SearchBar } from "react-native-elements";
 import { StackNavigator } from 'react-navigation';
-import Equation from '../Model/Equation.js';
 
 var height = Dimensions.get('window').height;
 
@@ -15,11 +14,8 @@ export default class HomePage extends React.Component {
   constructor(props) {
     super(props);
 
-    var eq1 = new Equation(1, "Momentum", "Calclate momentum", "p = m * v", ["m", "v"], ["*"])
-    var eq2 = new Equation(2, "Force", "May the force be with you", "F = dp * dt / dv", ["dp", "dt", "dv"], ["*", "/"])
-    var eq3 = new Equation(3, "Velocity", "WoW", "v = dr / dt", ["dr", "dt"], ["/"])
-
-    this.equations = [eq1, eq2, eq3]
+    var customData = require('../Model/Equations.json')
+    this.equations = customData["Equations"]
   }
 
   renderSeparator = () => {
