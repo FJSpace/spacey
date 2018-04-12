@@ -21,17 +21,35 @@ export default class DetailPage extends React.Component {
 
   render() {
 
-    let payments = [];
+    let parameters = [];
     for(let i = 0; i < this.equation.parameters.length; i++){
-      payments.push(
-        <View key={i}>
-          <Text>{this.equation.parameters[i]}</Text>
-          <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-            onChangeText={(text) => this.onParametersInput(i, text)}
-            value={this.state.parameterArray[i]}
-            keyboardType={'numeric'}
-          />
+      parameters.push(
+        <View>
+          <View style = {{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingTop: 10,
+            paddingBottom: 10
+          }} key={i}>
+            <Text style={{
+              flex: 1,
+              fontSize: 20,
+              marginLeft: '5%'
+            }}>{this.equation.parameters[i]}</Text>
+            <TextInput
+              style={{
+                height: 40,
+                borderColor: 'gray',
+                borderWidth: 1,
+                flex: 3,
+                marginRight: '20%'
+              }}
+              onChangeText={(text) => this.onParametersInput(i, text)}
+              value={this.state.parameterArray[i]}
+              keyboardType={'numeric'}
+            />
+          </View>
           {!!this.state.parametersValidation[i] && (
             <Text style={{color: 'red'}}>{this.state.parametersValidation[i]}</Text>
           )}
@@ -40,12 +58,23 @@ export default class DetailPage extends React.Component {
 
     return (
       <View>
-        <Text>{this.equation.name}</Text>
-        <Text>{this.equation.description}</Text>
-        <Text>{this.equation.equation}</Text>
+        <Text style = {{
+          marginLeft: '5%',
+          fontSize: 20,
+          paddingTop: 30,
+          paddingBottom: 10
+        }}>{this.equation.description}</Text>
+        <Text style = {{
+          fontSize: 16,
+          fontWeight: 'bold',
+          marginLeft: '5%'
+        }}>{this.equation.equation}</Text>
 
-        <View style={{paddingVertical: 16, paddingHorizontal: 8}}>
-          {payments}
+        <View style={{
+          paddingVertical: 16,
+          paddingHorizontal: 8,
+        }}>
+          {parameters}
         </View>
 
         <Text>{this.state.calculateResult}</Text>
