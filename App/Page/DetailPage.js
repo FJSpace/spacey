@@ -21,7 +21,7 @@ export default class DetailPage extends React.Component {
 
   render() {
 
-    var payments = [];
+    let payments = [];
     for(let i = 0; i < this.equation.parameters.length; i++){
       payments.push(
         <View key={i}>
@@ -30,7 +30,7 @@ export default class DetailPage extends React.Component {
             style={{height: 40, borderColor: 'gray', borderWidth: 1}}
             onChangeText={(text) => this.onParametersInput(i, text)}
             value={this.state.parameterArray[i]}
-            keyboardType={'number-pad'}
+            keyboardType={'numeric'}
           />
           {!!this.state.parametersValidation[i] && (
             <Text style={{color: 'red'}}>{this.state.parametersValidation[i]}</Text>
@@ -63,9 +63,9 @@ export default class DetailPage extends React.Component {
     const parametersValidation = this.state.parametersValidation
     parameterArray[index] = text
 
-    if (parameterArray[index] === "") {
+    if (parameterArray[index] === "") { // Empty
       parametersValidation[index] = "Required field."
-    } else if (!(/^\d+$/.test(parameterArray[index]))){
+    } else if (!(/^\d+$/.test(parameterArray[index]))){ // Number check.
       parametersValidation[index] = "Only numbers."
     } else {
       parametersValidation[index] = ""
@@ -83,7 +83,7 @@ export default class DetailPage extends React.Component {
     // Check for empty inputs.
     if(this.checkEmptyInputs()) {
       console.log("Empty Inputs!")
-      this.updateCalculateReulsts("Put in some values.")
+      this.updateCalculateReulsts("Values in the input(s) is required.")
 
       return
     }
@@ -96,9 +96,10 @@ export default class DetailPage extends React.Component {
        return
     }
 
-    var calculateResult = ""
-    for(let i = 0; i < this.state.parameterArray.length; i++){
+    let calculateResult = ""
 
+    // Loop through the parameters and add expression in between.
+    for(let i = 0; i < this.state.parameterArray.length; i++){
       if(this.state.parameterArray.length == 1) { // One parameter
         calculateResult += this.state.parameterArray[i] + this.equation.expressions[i]
       } else if (i == this.state.parameterArray.length-1) { // Check if the last parameter, then don't add an expression
@@ -106,7 +107,6 @@ export default class DetailPage extends React.Component {
       } else {
         calculateResult += this.state.parameterArray[i] + this.equation.expressions[i]
       }
-
     }
 
     this.updateCalculateReulsts(eval(calculateResult))
@@ -122,7 +122,7 @@ export default class DetailPage extends React.Component {
   // Also add parametersValidation text to that parameter.
   checkEmptyInputs() {
 
-    var bool = false
+    let bool = false
     const parametersValidation = this.state.parametersValidation
     for(let i = 0; i < this.state.parameterArray.length; i++){
       if (this.state.parameterArray[i] === "") {
