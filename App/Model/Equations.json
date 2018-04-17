@@ -1,36 +1,36 @@
 {
   "Equations": [
     {
-      id: 0,
-      name: "Momentum",
-      description: "Calclate momentum",
-      equation: "p = m * v",
-      parameters: ["m", "v"],
-      expressions: ["*"]
+      "id": 0,
+      "name": "Momentum",
+      "description": "Calclate momentum",
+      "equation": "p = m * v",
+      "parameters": ["m", "v"],
+      "expressions": ["*"]
     },
     {
-      id: 1,
-      name: "Force",
-      description: "May the force be with you",
-      equation: "F = dp * dt / dv",
-      parameters: ["dp", "dt", "dv"],
-      expressions: ["*", "/"]
+      "id": 1,
+      "name": "Force",
+      "description": "May the force be with you",
+      "equation": "F = dp * dt / dv",
+      "parameters": ["dp", "dt", "dv"],
+      "expressions": ["*", "/"]
     },
     {
-      id: 2,
-      name: "Test1",
-      description: "Test",
-      equation: "E = m + c - t",
-      parameters: ["m", "c", "t"],
-      expressions: ["+", "-"]
+      "id": 2,
+      "name": "Test1",
+      "description": "Test",
+      "equation": "E = m + c - t",
+      "parameters": ["m", "c", "t"],
+      "expressions": ["+", "-"]
     },
     {
-      id: 3,
-      name: "Test2",
-      description: "Test",
-      equation: "E = m * 2",
-      parameters: ["m"],
-      expressions: ["* 2"]
+      "id": 3,
+      "name": "Test2",
+      "description": "Test",
+      "equation": "E = m * 2",
+      "parameters": ["m"],
+      "expressions": ["* 2"]
     }
   ]
 }
