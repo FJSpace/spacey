@@ -20,13 +20,7 @@ export default class HomePage extends React.Component {
 
   renderSeparator = () => {
     return (
-      <View
-        style={{
-          height: 1,
-          width: "100%",
-          backgroundColor: "#CED0CE",
-        }}
-      />
+      <View style={styles.seperator} />
     );
   };
 
@@ -34,7 +28,7 @@ export default class HomePage extends React.Component {
 
     return (
       <View>
-        <List containerStyle={{ height, marginTop: 0, borderTopWidth: 0, borderBottomWidth: 0 }}>
+        <List containerStyle={styles.ListContainer}>
           <FlatList
             data={this.equations}
             renderItem={({ item }) => (
@@ -42,16 +36,10 @@ export default class HomePage extends React.Component {
               //   style = {{color: 'red'}}>
                 <ListItem
                   title = {item.name}
-                  titleStyle = {{
-                    fontSize: 30,
-                    paddingTop: 10,
-                    paddingBottom: 10
-                  }}
+                  titleStyle = {styles.listTitle}
                   subtitle = {item.equation}
-                  subtitleStyle = {{
-                    fontSize: 24
-                  }}
-                  containerStyle={{ borderBottomWidth: 0 }}
+                  subtitleStyle = {styles.listSubTitle}
+                  containerStyle={styles.lsitItemContainer}
                   onPress={()=> { this.onPress(item) }}
                 />
                 // </TouchableHighlight>
@@ -68,3 +56,34 @@ export default class HomePage extends React.Component {
     this.props.navigation.navigate('Detail', {title: equation.name, equation});
   }
 }
+
+const styles = StyleSheet.create({
+  seperator: 
+    {
+      height: 1,
+      width: "100%",
+      backgroundColor: "#CED0CE",
+      marginLeft: "5%"
+    },
+  ListContainer: 
+  { 
+    height, 
+    marginTop: 0, 
+    borderTopWidth: 0, 
+    borderBottomWidth: 0 
+  },
+  lsitItemContainer: 
+  { 
+    borderBottomWidth: 0 
+  },
+  listTitle:
+  {
+    fontSize: 30,
+    paddingTop: 10,
+    paddingBottom: 10
+  },
+  listSubTitle:
+  {
+    fontSize: 24
+  },
+});

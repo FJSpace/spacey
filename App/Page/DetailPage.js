@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, Button} from "react-native";
+import { View, Text, TextInput, Button, StyleSheet} from "react-native";
 
 export default class DetailPage extends React.Component {
 
@@ -21,66 +21,34 @@ export default class DetailPage extends React.Component {
 
   render() {
 
-    let parameters = [];
+    let payments = [];
     for(let i = 0; i < this.equation.parameters.length; i++){
-      parameters.push(
+      payments.push(
         <View key={i}>
-          <View style = {{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingTop: 10,
-            paddingBottom: 10
-          }}>
-            <Text style={{
-              flex: 1,
-              fontSize: 20,
-              marginLeft: '5%'
-            }}>{this.equation.parameters[i]}</Text>
-            <TextInput
-              style={{
-                height: 40,
-                borderColor: (!this.state.parametersValidation[i] ? 'gray' : 'red'),
-                borderWidth: 1,
-                flex: 3,
-                marginRight: '20%'
-              }}
-              onChangeText={(text) => this.onParametersInput(i, text)}
-              value={this.state.parameterArray[i]}
-              keyboardType={'numeric'}
-            />
-          </View>
+          <Text>{this.equation.parameters[i]}</Text>
+          <TextInput
+            style={styles.equation}
+            onChangeText={(text) => this.onParametersInput(i, text)}
+            value={this.state.parameterArray[i]}
+            keyboardType={'numeric'}
+          />
           {!!this.state.parametersValidation[i] && (
-            <Text style={{color: 'red', textAlign: 'right', marginRight: '10%'}}>{this.state.parametersValidation[i]}</Text>
+            <Text style={styles.validationTxtBox}>{this.state.parametersValidation[i]}</Text>
           )}
         </View>)
     }
 
     return (
       <View>
-        <Text style = {{
-          textAlign: 'center',
-          fontSize: 20,
-          paddingTop: 30,
-          paddingBottom: 10
-        }}>{this.equation.description}</Text>
-        <Text style = {{
-          fontSize: 16,
-          fontWeight: 'bold',
-          marginLeft: '5%'
-        }}>{this.equation.equation}</Text>
+        <Text>{this.equation.name}</Text>
+        <Text>{this.equation.description}</Text>
+        <Text>{this.equation.equation}</Text>
 
-        <View style={{
-          paddingVertical: 16,
-          paddingHorizontal: 8,
-        }}>
-          {parameters}
+        <View style={styles.equationParameters}>
+          {payments}
         </View>
 
-        <Text style={{
-          fontSize: 20,
-          marginLeft: '5%'
-        }}>{this.state.calculateResult}</Text>
+        <Text>{this.state.calculateResult}</Text>
 
         <Button
           onPress={ () => this.onCalculatePress()}
@@ -97,7 +65,7 @@ export default class DetailPage extends React.Component {
 
     if (parameterArray[index] === "") { // Empty
       parametersValidation[index] = "Required field."
-    } else if (!this.isNumeric(parameterArray[index])) { // Number check.
+    } else if (!(/^\d+$/.test(parameterArray[index]))){ // Number check.
       parametersValidation[index] = "Only numbers."
     } else {
       parametersValidation[index] = ""
@@ -170,8 +138,22 @@ export default class DetailPage extends React.Component {
     return bool
   }
 
-  isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
-  }
-
 }
+
+const styles = StyleSheet.create({
+  equation: 
+  {
+    height: 40, 
+    borderColor: 'gray', 
+    borderWidth: 1,
+  },
+  validationTxtBox: 
+  {
+    color: 'red',
+  },
+  equationParameters: 
+  {
+    paddingVertical: 16, 
+    paddingHorizontal: 8
+  },
+});
