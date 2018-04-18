@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, FlatList, ActivityIndicator, Dimensions, TouchableHighlight } from "react-native";
+import { View, Text, FlatList, ActivityIndicator, Dimensions, TouchableHighlight, StyleSheet } from "react-native";
 import { List, ListItem, SearchBar } from "react-native-elements";
 import { StackNavigator } from 'react-navigation';
 
@@ -58,23 +58,23 @@ export default class HomePage extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  seperator: 
+  seperator:
     {
       height: 1,
       width: "100%",
       backgroundColor: "#CED0CE",
       marginLeft: "5%"
     },
-  ListContainer: 
-  { 
-    height, 
-    marginTop: 0, 
-    borderTopWidth: 0, 
-    borderBottomWidth: 0 
+  ListContainer:
+  {
+    height,
+    marginTop: 0,
+    borderTopWidth: 0,
+    borderBottomWidth: 0
   },
-  lsitItemContainer: 
-  { 
-    borderBottomWidth: 0 
+  lsitItemContainer:
+  {
+    borderBottomWidth: 0
   },
   listTitle:
   {
