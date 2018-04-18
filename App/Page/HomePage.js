@@ -14,7 +14,7 @@ export default class HomePage extends React.Component {
   constructor(props) {
     super(props);
 
-    var customData = require('../Model/Equations.json')
+    var customData = require('../Model/Test.json')
     this.equations = customData["Equations"]
   }
 

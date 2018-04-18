@@ -23,9 +23,10 @@ export default class DetailPage extends React.Component {
 
     let payments = [];
     for(let i = 0; i < this.equation.parameters.length; i++){
+      this.state.parameterArray[i] = this.equation.parameters[i].value
       payments.push(
         <View key={i}>
-          <Text>{this.equation.parameters[i]}</Text>
+          <Text>{this.equation.parameters[i].var}</Text>
           <TextInput
             style={styles.equation}
             onChangeText={(text) => this.onParametersInput(i, text)}
@@ -141,19 +142,19 @@ export default class DetailPage extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  equation: 
+  equation:
   {
-    height: 40, 
-    borderColor: 'gray', 
+    height: 40,
+    borderColor: 'gray',
     borderWidth: 1,
   },
-  validationTxtBox: 
+  validationTxtBox:
   {
     color: 'red',
   },
-  equationParameters: 
+  equationParameters:
   {
-    paddingVertical: 16, 
+    paddingVertical: 16,
     paddingHorizontal: 8
   },
 });
