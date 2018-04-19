@@ -13,7 +13,7 @@ export default class DetailPage extends React.Component {
     this.equation = props.navigation.state.params.equation
 
     this.state={
-      parameterArray: Array(this.equation.parameters.length).fill(""),
+      parameterArray: this.equation.parameters.map(a => a.value),
       parametersValidation: Array(this.equation.parameters.length).fill(""),
       calculateResult: "Fill in values & calculate!"
     }
@@ -23,7 +23,6 @@ export default class DetailPage extends React.Component {
 
     let payments = [];
     for(let i = 0; i < this.equation.parameters.length; i++){
-      this.state.parameterArray[i] = this.equation.parameters[i].value
       payments.push(
         <View key={i}>
           <Text>{this.equation.parameters[i].var}</Text>
