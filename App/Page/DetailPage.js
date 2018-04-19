@@ -10,7 +10,7 @@ export default class DetailPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.equation = props.navigation.state.params.equation
+    this.equation = props.navigation.state.params.equation;
 
     this.state={
       parameterArray: this.equation.parameters.map(a => a.value),
@@ -27,7 +27,10 @@ export default class DetailPage extends React.Component {
         <View key={i}>
           <Text>{this.equation.parameters[i].var}</Text>
           <TextInput
-            style={styles.equation}
+            style={ [
+              styles.equation,
+              {borderColor: (!this.state.parametersValidation[i] ? 'gray' : 'red')}
+            ]}
             onChangeText={(text) => this.onParametersInput(i, text)}
             value={this.state.parameterArray[i]}
             keyboardType={'numeric'}
@@ -65,7 +68,7 @@ export default class DetailPage extends React.Component {
 
     if (parameterArray[index] === "") { // Empty
       parametersValidation[index] = "Required field."
-    } else if (!(/^\d+$/.test(parameterArray[index]))){ // Number check.
+    } else if (!this.isNumeric(parameterArray[index])) { // Number check.
       parametersValidation[index] = "Only numbers."
     } else {
       parametersValidation[index] = ""
@@ -138,13 +141,16 @@ export default class DetailPage extends React.Component {
     return bool
   }
 
+  isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  }
+
 }
 
 const styles = StyleSheet.create({
   equation:
   {
     height: 40,
-    borderColor: 'gray',
     borderWidth: 1,
   },
   validationTxtBox:
