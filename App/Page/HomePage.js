@@ -8,6 +8,7 @@ var height = Dimensions.get('window').height;
 
 export default class HomePage extends React.Component {
 
+  // To use local variables and functions, navigation.state has to be used.
   static navigationOptions = ({ navigation }) => {
       const { params = {} } = navigation.state;
       const buttonTitle = "Order"
@@ -18,8 +19,15 @@ export default class HomePage extends React.Component {
       };
   };
 
+  // Set a parameter in navigation as a function to be used in the header button.
+  componentWillMount() {
+    this.props.navigation.setParams({ editOrder: this._editOrder });
+  }
+
+  // This is neccaccary for the button in the header to be able to use the state variable.
   _editOrder = () => {
 
+    // Set the button in the header.
     if(!this.state.isOrder) {
       this.props.navigation.setParams({ buttonTitle: "Done" });
     } else {
@@ -27,10 +35,6 @@ export default class HomePage extends React.Component {
     }
 
     this.setState({ isOrder: !this.state.isOrder})
-  }
-
-  componentWillMount() {
-    this.props.navigation.setParams({ editOrder: this._editOrder });
   }
 
   constructor(props) {
@@ -47,7 +51,6 @@ export default class HomePage extends React.Component {
 
     // The order is stored in index.
     this.setOrder()
-
   }
 
   // Fetch the order from the locale storage. If there is none there, use standard.
@@ -64,6 +67,7 @@ export default class HomePage extends React.Component {
     }
   }
 
+  // Not used atm.
   renderSeparator = () => {
     return (
       <View style={styles.seperator} />
