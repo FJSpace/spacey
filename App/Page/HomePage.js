@@ -16,6 +16,7 @@ export default class HomePage extends React.Component {
 
     var customData = require('../Model/Equations.json')
     this.equations = customData["Equations"]
+
   }
 
   renderSeparator = () => {
