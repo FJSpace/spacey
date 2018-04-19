@@ -14,12 +14,19 @@ export default class HomePage extends React.Component {
 
       return {
         title: "Equations",
-        headerRight: <Button title={buttonTitle} onPress={() => params.editOrder()} />
+        headerRight: <Button title={params.buttonTitle || "Edit Order"} onPress={() => params.editOrder()} />
       };
   };
 
   _editOrder = () => {
-      this.setState({ isOrder: !this.state.isOrder})
+
+    if(!this.state.isOrder) {
+      this.props.navigation.setParams({ buttonTitle: "Done" });
+    } else {
+      this.props.navigation.setParams({ buttonTitle: null });
+    }
+
+    this.setState({ isOrder: !this.state.isOrder})
   }
 
   componentWillMount() {
