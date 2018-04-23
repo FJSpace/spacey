@@ -23,6 +23,7 @@
     "react": "16.2.0",
     "react-native": "0.52.0",
     "react-native-elements": "^0.19.1",
+    "react-native-sortable-listview": "^0.2.8",
     "react-native-search-bar": "^3.4.1",
     "react-navigation": "^1.5.11"
   }
