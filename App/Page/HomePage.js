@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ActivityIndicator, Dimensions, TouchableHighlight, StyleSheet, AsyncStorage, Button} from "react-native";
+import { View, Text, ActivityIndicator, Dimensions, TouchableHighlight, StyleSheet, AsyncStorage, Button, TextInput} from "react-native";
 import { List, ListItem, SearchBar } from "react-native-elements";
 import { StackNavigator } from 'react-navigation';
 import SortableListView from 'react-native-sortable-listview'
@@ -11,11 +11,10 @@ export default class HomePage extends React.Component {
   // To use local variables and functions, navigation.state has to be used.
   static navigationOptions = ({ navigation }) => {
       const { params = {} } = navigation.state;
-      const buttonTitle = "Order"
 
       return {
         title: "Equations",
-        headerRight: <Button title={params.buttonTitle || "Edit Order"} onPress={() => params.editOrder()} />
+        headerRight: <Button disabled={params.isSearching || false} title={params.buttonTitle || "Order"} onPress={() => params.editOrder()} />
       };
   };
 
@@ -38,6 +37,7 @@ export default class HomePage extends React.Component {
   }
 
   constructor(props) {
+
     super(props);
 
     var customData = require('../Model/Equations.json')
@@ -46,7 +46,11 @@ export default class HomePage extends React.Component {
     this.state={
       equations: equations,
       order: null,
-      isOrder: false
+      filterOrder: null,
+      isOrder: false,
+      isSearching: false,
+      isLoading: false,
+      text: '',
     }
 
     // The order is stored in index.
@@ -55,51 +59,124 @@ export default class HomePage extends React.Component {
 
   // Fetch the order from the locale storage. If there is none there, use standard.
   async setOrder() {
+    var order = []
     try {
       const value = await AsyncStorage.getItem('@MySuperStore:equationOrder');
       if (value !== null){
-        const order = JSON.parse(value)
-        this.setState({order})
+        order = JSON.parse(value)
       }
     } catch (error) {
-      const order = Object.keys(this.state.equations) // Array of keys, defaults
-      this.setState({order})
+      order = Object.keys(this.state.equations) // Array of keys, defaults
     }
+
+    this.setState({
+      order: order,
+      filterOrder: order
+    })
   }
 
+  SearchFilterFunction(text){
+    const equations = this.state.equations
+    const order = this.state.order
+
+    // Filter the search text in the equation.
+    var newData = equations.filter(function(item) {
+        const itemData = item.name.toUpperCase()
+        const textData = text.toUpperCase()
+        return itemData.indexOf(textData) > -1
+    })
+
+    // Order the filtered equations with the order.
+    result = []
+    order.forEach(function(key) {
+        var found = false;
+        newData = newData.filter(function(item) {
+            if(!found && item.id == key) {
+                result.push(item);
+                found = true;
+                return false;
+            } else
+                return true;
+        })
+    })
+
+    this.setState({
+        filterOrder: result.map(a => String(a.id)), // Map to only get the id's
+        text: text
+    })
+
+    // If searching, then disable filters
+    if(text) {
+      this.props.navigation.setParams({ isSearching: true});
+      this.props.navigation.setParams({ buttonTitle: null });
+      this.setState({
+        isSearching: true,
+        isOrder: false
+      })
+    } else {
+      this.props.navigation.setParams({ isSearching: false});
+      this.setState({
+        isSearching: false
+      })
+    }
+}
+
   // Not used atm.
-  renderSeparator = () => {
+  ListViewItemSeparator = () => {
     return (
-      <View style={styles.seperator} />
+      <View
+        style={{
+          height: .5,
+          width: "100%",
+          backgroundColor: "#000",
+        }}
+      />
     );
-  };
+  }
+
 
   render() {
+    if (this.state.isLoading) {
+      return (
+        <View style={{flex: 1, paddingTop: 20}}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
 
     return (
-      <SortableListView
-        style={{ flex: 1 }}
-        data={this.state.equations}
-        order={this.state.order}
-        disableSorting= {!this.state.isOrder}
-        onRowMoved={e => {
-          const order = this.state.order
-          order.splice(e.to, 0, order.splice(e.from, 1)[0])
-          this.setState({order})
-          this.onRowMoved()
-        }}
-        renderRow={ item  => (
-            <ListItem
-              title = {item.name}
-              titleStyle = {styles.listTitle}
-              subtitle = {item.equation}
-              subtitleStyle = {styles.listSubTitle}
-              containerStyle={styles.listItemContainer}
-              rightIcon={{ name: 'chevron-right' }}
-              onPress={()=> { this.onPress(item) }}
-            />
-          )}
-      />
+      <View style={styles.MainContainer}>
+
+        <TextInput
+           style={styles.TextInputStyleClass}
+           onChangeText={(text) => this.SearchFilterFunction(text)}
+           value={this.state.text}
+           underlineColorAndroid='transparent'
+           placeholder="Search Here"
+        />
+
+        <SortableListView
+          style={{ flex: 1 }}
+          data={this.state.equations}
+          order={this.state.filterOrder}
+          disableSorting= {!this.state.isOrder}
+          onRowMoved={e => {
+            this.onRowMoved(e)
+          }}
+          renderRow={ item  => (
+              <ListItem
+                title = {item.name}
+                titleStyle = {styles.listTitle}
+                subtitle = {item.equation}
+                subtitleStyle = {styles.listSubTitle}
+                containerStyle={styles.listItemContainer}
+                rightIcon={{ name: 'chevron-right' }}
+                onPress={()=> { this.onPress(item) }}
+              />
+            )}
+        />
+
+      </View>
     );
   }
 
@@ -107,45 +184,50 @@ export default class HomePage extends React.Component {
     this.props.navigation.navigate('Detail', {title: equation.name, equation});
   }
 
-  async onRowMoved() {
+  async onRowMoved(e) {
+    // Order the list
+    const order = this.state.order
+    order.splice(e.to, 0, order.splice(e.from, 1)[0])
+    this.setState({
+      order: order,
+      filterOrder: order
+    })
 
-      // Store the order in local storage when row is moved.
-      try {
-        await AsyncStorage.setItem('@MySuperStore:equationOrder', JSON.stringify(this.state.order));
-      } catch (error) {
-        console.log("Fail to store equation order!")
-      }
+    // Store the order in local storage when row is moved.
+    try {
+      await AsyncStorage.setItem('@MySuperStore:equationOrder', JSON.stringify(this.state.order));
+    } catch (error) {
+      console.log("Fail to store equation order!")
+    }
   }
+
 }
 
 
 const styles = StyleSheet.create({
-  seperator:
-    {
-      height: 1,
-      width: "100%",
-      backgroundColor: "#CED0CE",
-      marginLeft: "5%"
-    },
-  ListContainer:
-  {
-    height,
-    marginTop: 0,
-    borderTopWidth: 0,
+  MainContainer : {
+     justifyContent: 'center',
+     flex:1,
+     margin: 7,
+   },
+
+  listItemContainer: {
     borderBottomWidth: 0
   },
-  listItemContainer:
-  {
-    borderBottomWidth: 0
-  },
-  listTitle:
-  {
+
+  listTitle: {
     fontSize: 30,
     paddingTop: 10,
     paddingBottom: 10
   },
-  listSubTitle:
-  {
-    fontSize: 24
-  },
+
+  TextInputStyleClass :{
+   textAlign: 'center',
+   height: 40,
+   borderWidth: 1,
+   borderColor: '#009688',
+   borderRadius: 7 ,
+   backgroundColor : "#FFFFFF"
+  }
+
 });
