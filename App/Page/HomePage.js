@@ -14,7 +14,7 @@ export default class HomePage extends React.Component {
 
       return {
         title: "Equations",
-        headerRight: <Button disabled={params.isSearching || false} title={params.buttonTitle || "Order"} onPress={() => params.editOrder()} />
+        headerRight: <Button disabled={params.isSearching || false} title={params.buttonTitle || "Order"} onPress={() => params.editOrder()} color="#E73137" />
       };
   };
 
@@ -138,7 +138,7 @@ export default class HomePage extends React.Component {
   render() {
     if (this.state.isLoading) {
       return (
-        <View style={{flex: 1, paddingTop: 20}}>
+        <View style={styles.StateLoading}>
           <ActivityIndicator />
         </View>
       );
@@ -228,6 +228,11 @@ const styles = StyleSheet.create({
    borderColor: '#009688',
    borderRadius: 7 ,
    backgroundColor : "#FFFFFF"
+  },
+
+  StateLoading:{
+    flex: 1,
+    paddingTop: 20
   }
 
 });
