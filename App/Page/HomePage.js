@@ -66,7 +66,7 @@ export default class HomePage extends React.Component {
         order = JSON.parse(value)
 
         // Reset to default order if the equations are changed.
-        if(order.length != Object.keys(this.state.equations).length) {
+        if(order.length !== Object.keys(this.state.equations).length) {
           order = Object.keys(this.state.equations)
         }
 
@@ -76,8 +76,8 @@ export default class HomePage extends React.Component {
     }
 
     this.setState({
-      order: order,
-      filterOrder: order
+      order: ["0","1"],
+      filterOrder: ["0","1"]
     })
   }
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button, StyleSheet} from "react-native";
-import EquationComponents from "../Components/EquationComponent.js";
+import CalculateEquations from "../Components/DetailPage/CalculateEquation.js";
 
 export default class DetailPage extends React.Component {
 
@@ -21,9 +21,44 @@ export default class DetailPage extends React.Component {
   }
 
   render() {
-    return (
-      <EquationComponents> </EquationComponents>
-    )
+      let payments = [];
+      for(let i = 0; i < this.equation.parameters.length; i++){
+        payments.push(
+          <View key={i}>
+            <Text>{this.equation.parameters[i].var}</Text>
+            <TextInput
+              style={ [
+                styles.equation,
+                {borderColor: (!this.state.parametersValidation[i] ? 'gray' : 'red')}
+              ]}
+              onChangeText={(text) => this.onParametersInput(i, text)}
+              value={this.state.parameterArray[i]}
+              keyboardType={'numeric'}
+            />
+            {!!this.state.parametersValidation[i] && (
+              <Text style={styles.validationTxtBox}>{this.state.parametersValidation[i]}</Text>
+            )}
+          </View>)
+      }
+  
+      return (
+        <View>
+          <Text>{this.equation.name}</Text>
+          <Text>{this.equation.description}</Text>
+          <Text>{this.equation.equation}</Text>
+  
+          <View style={styles.equationParameters}>
+            {payments}
+          </View>
+  
+          <Text>{this.state.calculateResult}</Text>
+  
+          <Button
+            onPress={ () => this.onCalculatePress()}
+            title="Calculate"
+          />
+        </View>
+      )
   }
 
   onParametersInput(index, text) {
@@ -48,7 +83,7 @@ export default class DetailPage extends React.Component {
 
   onCalculatePress() {
 
-    // Check for empty inputs.
+     // Check for empty inputs.
     if(this.checkEmptyInputs()) {
       console.log("Empty Inputs!")
       this.updateCalculateReulsts("Values in the input(s) is required.")
@@ -64,7 +99,7 @@ export default class DetailPage extends React.Component {
        return
     }
 
-    let calculateResult = ""
+    /*
 
     // Loop through the parameters and add expression in between.
     for(let i = 0; i < this.state.parameterArray.length; i++){
@@ -75,7 +110,10 @@ export default class DetailPage extends React.Component {
       } else {
         calculateResult += this.state.parameterArray[i] + this.equation.expressions[i]
       }
-    }
+    } */
+    var c = new CalculateEquations();
+    let calculateResult = ""
+    calculateResult = c.Calculate(this.state.parameterArray, this.equation);
 
     this.updateCalculateReulsts(eval(calculateResult))
   }
