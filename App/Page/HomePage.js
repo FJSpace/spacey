@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { View, Text, ActivityIndicator, Dimensions, TouchableHighlight, StyleSheet, AsyncStorage, Button, TextInput} from "react-native";
-import { List, ListItem, SearchBar } from "react-native-elements";
+import { View, Text, ActivityIndicator, Dimensions, StyleSheet, AsyncStorage, Button} from "react-native";
 import { StackNavigator } from 'react-navigation';
-import SortableListView from 'react-native-sortable-listview'
+import HomePageComponents from '../components/HomePageComponents.js';
 
 var height = Dimensions.get('window').height;
 
@@ -37,7 +36,6 @@ export default class HomePage extends React.Component {
   }
 
   constructor(props) {
-
     super(props);
 
     var customData = require('../Model/Equations.json')
@@ -55,6 +53,8 @@ export default class HomePage extends React.Component {
 
     // The order is stored in index.
     this.setOrder()
+
+    this.c = new HomePageComponents()
   }
 
   // Fetch the order from the locale storage. If there is none there, use standard.
@@ -81,10 +81,14 @@ export default class HomePage extends React.Component {
     })
   }
 
+  test(text) {
+    SearchFilterFunction(text)
+  }
+
   SearchFilterFunction(text){
     const equations = this.state.equations
     const order = this.state.order
-
+    console.log(this.state)
     // Filter the search text in the equation.
     var newData = equations.filter(function(item) {
         const itemData = item.name.toUpperCase()
@@ -140,7 +144,6 @@ export default class HomePage extends React.Component {
     );
   }
 
-
   render() {
     if (this.state.isLoading) {
       return (
@@ -152,41 +155,13 @@ export default class HomePage extends React.Component {
 
     return (
       <View style={styles.MainContainer}>
-
-        <TextInput
-           style={styles.TextInputStyleClass}
-           onChangeText={(text) => this.SearchFilterFunction(text)}
-           value={this.state.text}
-           underlineColorAndroid='transparent'
-           placeholder="Search Here"
-        />
-
-        <SortableListView
-          style={{ flex: 1 }}
-          data={this.state.equations}
-          order={this.state.filterOrder}
-          disableSorting= {!this.state.isOrder}
-          onRowMoved={e => {
-            this.onRowMoved(e)
-          }}
-          renderRow={ item  => (
-              <ListItem
-                title = {item.name}
-                titleStyle = {styles.listTitle}
-                subtitle = {item.equation}
-                subtitleStyle = {styles.listSubTitle}
-                containerStyle={styles.listItemContainer}
-                rightIcon={{ name: 'chevron-right' }}
-                onPress={()=> { this.onPress(item) }}
-              />
-            )}
-        />
-
+        {this.c.searchInput(this.state, this.SearchFilterFunction.bind(this), styles)}
+        {this.c.equationSortList(this.state, this.onRowMoved.bind(this), this.onItemPress.bind(this), styles)}
       </View>
     );
   }
 
-  onPress(equation) {
+  onItemPress(equation) {
     this.props.navigation.navigate('Detail', {title: equation.name, equation});
   }
 
