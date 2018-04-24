@@ -5,7 +5,9 @@
       "name": "Momentum",
       "description": "Calclate momentum",
       "equation": "p = m * v",
-      "parameters": ["m", "v"],
+      "parameters": [
+        {"var":"m", "value":"1"},
+        {"var":"v", "value":"2"}],
       "expressions": ["*"]
     },
     {
@@ -13,23 +15,83 @@
       "name": "Force",
       "description": "May the force be with you",
       "equation": "F = dp * dt / dv",
-      "parameters": ["dp", "dt", "dv"],
+      "parameters": [
+        {"var":"dp", "value":"3"},
+        {"var":"dt", "value":"4"},
+        {"var":"dv", "value":"5"}],
       "expressions": ["*", "/"]
     },
     {
       "id": 2,
-      "name": "Test1",
-      "description": "Test",
-      "equation": "E = m + c - t",
-      "parameters": ["m", "c", "t"],
-      "expressions": ["+", "-"]
+      "name": "CurrnetMass",
+      "description": "Instantaneous Currnet Mass of rocket (kg)",
+      "equation": "M = P * A",
+      "parameters": [
+        {"var":"P", "value":"1710000"},
+        {"var":"A", "value":"0.9"}],
+      "expressions": ["*"]
     },
     {
       "id": 3,
+      "name": "ExhaustVelocity",
+      "description": "Rocket Exhaust Velocity (m/s)",
+      "equation": "Ve = G0 * ISP",
+      "parameters": [
+        {"var":"G0", "value":"9.81"},
+        {"var":"A", "value":"3600"}],
+      "expressions": ["*"]
+    },
+    {
+      "id": 4,
+      "name": "WetMass",
+      "description": "Mass of rocket with full propellant tanks (kg)",
+      "equation": "Mw = Mp + Mps + Ms + Mpf",
+      "parameters": [
+        {"var":"Mp", "value":"50000"},
+        {"var":"Mps", "value":"30000"},
+        {"var":"Ms", "value":"300000"},
+        {"var":"Mpf", "value":"60000"}
+      ],
+      "expressions": ["+","+","+"]
+    },
+    {
+      "id": 5,
+      "name": "PropellantMassFull",
+      "description": "The maximum mass of propellant the tanks can hold (kg)",
+      "equation": "Mp = (R-1) * Me",
+      "parameters": [
+        {"var":"R", "value":"2.5"},
+        {"var":"Me", "value":"60000"}],
+      "expressions": ["-","*"]
+    },
+    {
+      "id": 6,
+      "name": "MassRatio",
+      "description": "Ratio of rocket wet mass to rocket dry mass (kg)",
+      "equation": "R = M / Me",
+      "parameters": [
+        {"var":"M", "value":"75000"},
+        {"var":"Me", "value":"60000"}],
+      "expressions": ["/"]
+    },
+    {
+      "id": 7,
+      "name": "Test1",
+      "description": "Test",
+      "equation": "E = m + c - t",
+      "parameters": [
+        {"var":"m", "value":"6"},
+        {"var":"c", "value":"7"},
+        {"var":"t", "value":"8"}],
+      "expressions": ["+", "-"]
+    },
+    {
+      "id": 8,
       "name": "Test2",
       "description": "Test",
       "equation": "E = m * 2",
-      "parameters": ["m"],
+      "parameters": [
+        {"var":"m", "value":"9"}],
       "expressions": ["* 2"]
     }
   ]

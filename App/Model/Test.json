@@ -1,0 +1,32 @@
+{
+  "Correct": {
+    "id": 0,
+    "name": "Momentum",
+    "description": "Calclate momentum",
+    "equation": "p = m * v",
+    "parameters": [
+      {"var":"m", "value":"5"},
+      {"var":"v", "value":"5"}],
+    "expressions": ["*"]
+  },
+  "Empty":{
+    "id": 0,
+    "name": "Momentum",
+    "description": "Calclate momentum",
+    "equation": "p = m * v",
+    "parameters": [
+      {"var":"m", "value":"5"},
+      {"var":"v", "value":""}],
+    "expressions": ["*"]
+  },
+  "Text":{
+    "id": 0,
+    "name": "Momentum",
+    "description": "Calclate momentum",
+    "equation": "p = m * v",
+    "parameters": [
+      {"var":"m", "value":"5"},
+      {"var":"v", "value":"5..5"}],
+    "expressions": ["*"]
+  }
+  }
