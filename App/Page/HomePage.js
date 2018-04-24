@@ -64,13 +64,12 @@ export default class HomePage extends React.Component {
       const value = await AsyncStorage.getItem('@MySuperStore:equationOrder');
       if (value !== null){
         order = JSON.parse(value)
-        console.log(order)
+
+        // Reset to default order if the equations are changed.
         if(order.length != Object.keys(this.state.equations).length) {
-          console.log("NO")
-          order = Object.keys(this.state.equations) // Reset to default order if the equations are changed.
+          order = Object.keys(this.state.equations)
         }
 
-        console.log(order)
       }
     } catch (error) {
       order = Object.keys(this.state.equations) // Array of keys, defaults
