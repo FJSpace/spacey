@@ -62,14 +62,19 @@ export default class HomePage extends React.Component {
     var order = []
     try {
       const value = await AsyncStorage.getItem('@MySuperStore:equationOrder');
-      if (value !== null){
+      if (value != null){
         order = JSON.parse(value)
+
+        console.log(order.length)
 
         // Reset to default order if the equations are changed.
         if(order.length != Object.keys(this.state.equations).length) {
           order = Object.keys(this.state.equations)
         }
 
+        console.log(order.length)
+      } else {
+        order = Object.keys(this.state.equations) // Array of keys, defaults
       }
     } catch (error) {
       order = Object.keys(this.state.equations) // Array of keys, defaults
@@ -88,7 +93,7 @@ export default class HomePage extends React.Component {
   SearchFilterFunction(text){
     const equations = this.state.equations
     const order = this.state.order
-    console.log(this.state)
+
     // Filter the search text in the equation.
     var newData = equations.filter(function(item) {
         const itemData = item.name.toUpperCase()
@@ -130,19 +135,6 @@ export default class HomePage extends React.Component {
       })
     }
 }
-
-  // Not used atm.
-  ListViewItemSeparator = () => {
-    return (
-      <View
-        style={{
-          height: .5,
-          width: "100%",
-          backgroundColor: "#000",
-        }}
-      />
-    );
-  }
 
   render() {
     if (this.state.isLoading) {
