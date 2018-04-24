@@ -1,28 +1,47 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button, StyleSheet} from "react-native";
-import EquationComponents from "../Components/EquationComponent.js";
 
-export default class DetailPage extends React.Component {
-
-  static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.title}`,
-  });
-
-  constructor(props) {
-    super(props);
-
-    this.equation = props.navigation.state.params.equation;
-
-    this.state={
-      parameterArray: this.equation.parameters.map(a => a.value),
-      parametersValidation: Array(this.equation.parameters.length).fill(""),
-      calculateResult: "Fill in values & calculate!"
-    }
-  }
+export default class EquationComponent extends React.Component {
 
   render() {
+
+    let payments = [];
+    for(let i = 0; i < this.equation.parameters.length; i++){
+      payments.push(
+        <View key={i}>
+          <Text>{this.equation.parameters[i].var}</Text>
+          <TextInput
+            style={ [
+              styles.equation,
+              {borderColor: (!this.state.parametersValidation[i] ? 'gray' : 'red')}
+            ]}
+            onChangeText={(text) => this.onParametersInput(i, text)}
+            value={this.state.parameterArray[i]}
+            keyboardType={'numeric'}
+          />
+          {!!this.state.parametersValidation[i] && (
+            <Text style={styles.validationTxtBox}>{this.state.parametersValidation[i]}</Text>
+          )}
+        </View>)
+    }
+
     return (
-      <EquationComponents> </EquationComponents>
+      <View>
+        <Text>{this.equation.name}</Text>
+        <Text>{this.equation.description}</Text>
+        <Text>{this.equation.equation}</Text>
+
+        <View style={styles.equationParameters}>
+          {payments}
+        </View>
+
+        <Text>{this.state.calculateResult}</Text>
+
+        <Button
+          onPress={ () => this.onCalculatePress()}
+          title="Calculate"
+        />
+      </View>
     )
   }
 
