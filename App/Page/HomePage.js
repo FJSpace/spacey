@@ -20,7 +20,8 @@ export default class HomePage extends React.Component {
 
   // Set a parameter in navigation as a function to be used in the header button.
   componentWillMount() {
-    this.props.navigation.setParams({ editOrder: this._editOrder });
+	if(this.props.navigation)  
+		this.props.navigation.setParams({ editOrder: this._editOrder });
   }
 
   // This is neccaccary for the button in the header to be able to use the state variable.
