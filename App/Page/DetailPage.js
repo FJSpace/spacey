@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button, StyleSheet} from "react-native";
-import {Fumi} from 'react-native-textinput-effects'
-import Feather from 'react-native-vector-icons'
+import {Fumi} from 'react-native-textinput-effects';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 
 export default class DetailPage extends React.Component {
 
@@ -31,7 +31,7 @@ export default class DetailPage extends React.Component {
             value={this.state.parameterArray[i]}
             keyboardType={'numeric'}
             onChangeText={(text)=>this.onParametersInput(i,text)}
-            iconClass={Feather}
+            iconClass={FeatherIcon}
             iconName={'edit'}
             style={styles.input}/>
           {!!this.state.parametersValidation[i] && (
