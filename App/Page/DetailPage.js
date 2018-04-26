@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button, StyleSheet} from "react-native";
-import {Kaede} from 'react-native-textinput-effects'
+import {Fumi} from 'react-native-textinput-effects'
+import Feather from 'react-native-vector-icons'
 
 export default class DetailPage extends React.Component {
 
@@ -26,10 +27,11 @@ export default class DetailPage extends React.Component {
     for(let i = 0; i < this.equation.parameters.length; i++){
       payments.push(
         <View key={i}>
-          <Kaede label={this.equation.parameters[i].var}
+          <Fumi label={this.equation.parameters[i].var}
             value={this.state.parameterArray[i]}
             keyboardType={'numeric'}
-            onChangeText={(text)=>this.onParametersInput(i,text)}/>
+            onChangeText={(text)=>this.onParametersInput(i,text)}
+            style={styles.input}/>
           {!!this.state.parametersValidation[i] && (
             <Text style={styles.validationTxtBox}>{this.state.parametersValidation[i]}</Text>
           )}
@@ -157,4 +159,8 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 8
   },
+  input:
+  {
+    paddingTop: 4
+  }
 });
