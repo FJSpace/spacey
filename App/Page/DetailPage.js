@@ -31,6 +31,8 @@ export default class DetailPage extends React.Component {
             value={this.state.parameterArray[i]}
             keyboardType={'numeric'}
             onChangeText={(text)=>this.onParametersInput(i,text)}
+            iconClass={Feather}
+            iconName={'edit'}
             style={styles.input}/>
           {!!this.state.parametersValidation[i] && (
             <Text style={styles.validationTxtBox}>{this.state.parametersValidation[i]}</Text>
