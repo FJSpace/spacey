@@ -17,6 +17,6 @@ Calculate(equationParams, equation)
         calculateResult += equationParams[i] + equation.expressions[i]
       }
     }
-    return calculateResult;
+    return eval(calculateResult);
   }
 }
