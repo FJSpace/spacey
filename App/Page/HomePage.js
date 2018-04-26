@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { View, Text, ActivityIndicator, Dimensions, TouchableHighlight, StyleSheet, AsyncStorage, Button, TextInput} from "react-native";
-import { List, ListItem, SearchBar } from "react-native-elements";
+import { View, Text, ActivityIndicator, Dimensions, StyleSheet, AsyncStorage, Button} from "react-native";
 import { StackNavigator } from 'react-navigation';
-import SortableListView from 'react-native-sortable-listview'
+import HomePageComponents from '../components/HomePageComponents.js';
 
 var height = Dimensions.get('window').height;
 
@@ -20,7 +19,8 @@ export default class HomePage extends React.Component {
 
   // Set a parameter in navigation as a function to be used in the header button.
   componentWillMount() {
-    this.props.navigation.setParams({ editOrder: this._editOrder });
+	if(this.props.navigation)  
+		this.props.navigation.setParams({ editOrder: this._editOrder });
   }
 
   // This is neccaccary for the button in the header to be able to use the state variable.
@@ -37,7 +37,6 @@ export default class HomePage extends React.Component {
   }
 
   constructor(props) {
-
     super(props);
 
     var customData = require('../Model/Equations.json')
@@ -55,6 +54,8 @@ export default class HomePage extends React.Component {
 
     // The order is stored in index.
     this.setOrder()
+
+    this.c = new HomePageComponents()
   }
 
   // Fetch the order from the locale storage. If there is none there, use standard.
@@ -62,14 +63,19 @@ export default class HomePage extends React.Component {
     var order = []
     try {
       const value = await AsyncStorage.getItem('@MySuperStore:equationOrder');
-      if (value !== null){
+      if (value != null){
         order = JSON.parse(value)
+
+        console.log(order.length)
 
         // Reset to default order if the equations are changed.
         if(order.length !== Object.keys(this.state.equations).length) {
           order = Object.keys(this.state.equations)
         }
 
+        console.log(order.length)
+      } else {
+        order = Object.keys(this.state.equations) // Array of keys, defaults
       }
     } catch (error) {
       order = Object.keys(this.state.equations) // Array of keys, defaults
@@ -79,6 +85,10 @@ export default class HomePage extends React.Component {
       order: ["0","1"],
       filterOrder: ["0","1"]
     })
+  }
+
+  test(text) {
+    SearchFilterFunction(text)
   }
 
   SearchFilterFunction(text){
@@ -127,20 +137,6 @@ export default class HomePage extends React.Component {
     }
 }
 
-  // Not used atm.
-  ListViewItemSeparator = () => {
-    return (
-      <View
-        style={{
-          height: .5,
-          width: "100%",
-          backgroundColor: "#000",
-        }}
-      />
-    );
-  }
-
-
   render() {
     if (this.state.isLoading) {
       return (
@@ -152,41 +148,13 @@ export default class HomePage extends React.Component {
 
     return (
       <View style={styles.MainContainer}>
-
-        <TextInput
-           style={styles.TextInputStyleClass}
-           onChangeText={(text) => this.SearchFilterFunction(text)}
-           value={this.state.text}
-           underlineColorAndroid='transparent'
-           placeholder="Search Here"
-        />
-
-        <SortableListView
-          style={{ flex: 1 }}
-          data={this.state.equations}
-          order={this.state.filterOrder}
-          disableSorting= {!this.state.isOrder}
-          onRowMoved={e => {
-            this.onRowMoved(e)
-          }}
-          renderRow={ item  => (
-              <ListItem
-                title = {item.name}
-                titleStyle = {styles.listTitle}
-                subtitle = {item.equation}
-                subtitleStyle = {styles.listSubTitle}
-                containerStyle={styles.listItemContainer}
-                rightIcon={{ name: 'chevron-right' }}
-                onPress={()=> { this.onPress(item) }}
-              />
-            )}
-        />
-
+        {this.c.searchInput(this.state, this.SearchFilterFunction.bind(this), styles)}
+        {this.c.equationSortList(this.state, this.onRowMoved.bind(this), this.onItemPress.bind(this), styles)}
       </View>
     );
   }
 
-  onPress(equation) {
+  onItemPress(equation) {
     this.props.navigation.navigate('Detail', {title: equation.name, equation});
   }
 
