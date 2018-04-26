@@ -27,7 +27,7 @@ export default class DetailPage extends React.Component {
       payments.push(
         <View key={i}>
           <Kaede label={this.equation.parameters[i].var}
-            defaultValue={this.state.parameterArray[i]}
+            value={this.state.parameterArray[i]}
             keyboardType={'numeric'}
             onChangeText={(text)=>this.onParametersInput(i,text)}/>
           {!!this.state.parametersValidation[i] && (
