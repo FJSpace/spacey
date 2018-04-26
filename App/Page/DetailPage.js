@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button, StyleSheet} from "react-native";
+import {Kaede} from 'react-native-textinput-effects'
 
 export default class DetailPage extends React.Component {
 
@@ -25,16 +26,10 @@ export default class DetailPage extends React.Component {
     for(let i = 0; i < this.equation.parameters.length; i++){
       payments.push(
         <View key={i}>
-          <Text>{this.equation.parameters[i].var}</Text>
-          <TextInput
-            style={ [
-              styles.equation,
-              {borderColor: (!this.state.parametersValidation[i] ? 'gray' : 'red')}
-            ]}
-            onChangeText={(text) => this.onParametersInput(i, text)}
-            value={this.state.parameterArray[i]}
+          <Kaede label={this.equation.parameters[i].var}
+            defaultValue={this.state.parameterArray[i]}
             keyboardType={'numeric'}
-          />
+            onChangeText={(text)=>this.onParametersInput(i,text)}/>
           {!!this.state.parametersValidation[i] && (
             <Text style={styles.validationTxtBox}>{this.state.parametersValidation[i]}</Text>
           )}
