@@ -15,7 +15,7 @@ export default class DetailPage extends React.Component {
     this.state={
       parameterArray: this.equation.parameters.map(a => a.value),
       parametersValidation: Array(this.equation.parameters.length).fill(""),
-      calculateResult: "Fill in values & calculate!"
+      calculateResult: "Input values to calculate!"
     }
   }
 
@@ -25,10 +25,10 @@ export default class DetailPage extends React.Component {
     for(let i = 0; i < this.equation.parameters.length; i++){
       payments.push(
         <View key={i}>
-          <Text>{this.equation.parameters[i].var}</Text>
+          <Text style = {styles.parameter}>{this.equation.parameters[i].var}</Text>
           <TextInput
             style={ [
-              styles.equation,
+              styles.parameterValue,
               {borderColor: (!this.state.parametersValidation[i] ? 'gray' : 'red')}
             ]}
             onChangeText={(text) => this.onParametersInput(i, text)}
@@ -43,15 +43,15 @@ export default class DetailPage extends React.Component {
 
     return (
       <View>
-        <Text>{this.equation.name}</Text>
-        <Text>{this.equation.description}</Text>
-        <Text>{this.equation.equation}</Text>
+        <Text style = {styles.equationTitle}>{this.equation.name}</Text>
+        <Text style = {styles.equationDescription}>{this.equation.description}</Text>
+        <Text style = {styles.equationText}>{this.equation.equation}</Text>
 
         <View style={styles.equationParameters}>
           {payments}
         </View>
 
-        <Text>{this.state.calculateResult}</Text>
+        <Text style = {styles.equationDescription}>{this.state.calculateResult}</Text>
 
         <Button
           onPress={ () => this.onCalculatePress()}
@@ -148,10 +148,13 @@ export default class DetailPage extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  equation:
+  parameterValue:
   {
     height: 40,
     borderWidth: 1,
+    marginLeft: 10,
+    marginRight: 10,
+    paddingLeft: 5
   },
   validationTxtBox:
   {
@@ -160,6 +163,36 @@ const styles = StyleSheet.create({
   equationParameters:
   {
     paddingVertical: 16,
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
   },
+  equationTitle:
+  {
+    fontSize: 30,
+    fontFamily: 'Avenir Next',
+    textAlign: 'center',
+    paddingTop: 20
+  },
+  equationDescription:
+  {
+    fontSize: 15,
+    fontFamily: 'Avenir Next',
+    textAlign: 'center',
+    paddingLeft: 20,
+    paddingRight: 20
+  },
+  equationText:
+  {
+    fontFamily: 'AvenirNext-Italic',
+    fontSize: 20,
+    paddingTop: 20,
+    textAlign: 'center'
+  },
+  parameter:
+  {
+    fontFamily: 'Avenir Next',
+    fontSize: 18,
+    paddingBottom: 5,
+    paddingTop: 20,
+    paddingLeft: 10
+  }
 });
