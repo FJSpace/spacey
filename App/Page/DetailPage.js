@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button, StyleSheet} from "react-native";
-import {Kaede, Akira} from 'react-native-textinput-effects';
+import {Kaede} from 'react-native-textinput-effects';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import AwesomeButton from 'react-native-really-awesome-button';
+
 
 export default class DetailPage extends React.Component {
 
@@ -41,7 +44,6 @@ export default class DetailPage extends React.Component {
 
     return (
       <View style={styles.equationPa}>
-        <Text style={styles.text}>{this.equation.name}</Text>
         <Text style={styles.text}>{this.equation.description}</Text>
 
         <View style={styles.equationParameters}>
@@ -50,14 +52,16 @@ export default class DetailPage extends React.Component {
 
         <Text style={styles.text}>Fill in values & calculate!</Text>
 
-        <View style={{flex: 1, flexDirection: 'row', paddingHorizontal: 8}}>
+        <View style={styles.res}>
           <Text>{this.equation.equation} = </Text>
           <Text>{this.state.calculateResult}</Text>
         </View>
-        <Button
+        <AwesomeButton
           onPress={ () => this.onCalculatePress()}
-          title="Calculate"
-        />
+          style={styles.aweBut}>
+          <Icon name='calculator' color='#E73137' size={27} style={{margin: '8%'}}/>
+          <Text style={styles.butText}>Calculate</Text>
+        </AwesomeButton>
       </View>
     )
   }
@@ -180,5 +184,23 @@ const styles = StyleSheet.create({
   {
     flex: 1,
     flexDirection: 'column'
-  }  
+  },
+  aweBut:
+  {
+    alignSelf: 'center',
+    backgroundColor: '#B7B9B8',
+    marginBottom: 3
+  },
+  butText:
+  {
+    fontSize: 20,
+    color: '#0C3F7D',
+    margin: '8%'
+  },
+  res:
+  {
+    flex: 1,
+    flexDirection: 'row',
+    paddingHorizontal: 8
+  }
 });
