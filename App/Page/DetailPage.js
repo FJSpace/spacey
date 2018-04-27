@@ -44,7 +44,7 @@ export default class DetailPage extends React.Component {
 
     return (
       <View style={styles.equationPa}>
-        <Text style={styles.text}>{this.equation.description}</Text>
+        <Text style={styles.textDesc}>{this.equation.description}</Text>
 
         <View style={styles.equationParameters}>
           {payments}
@@ -153,9 +153,13 @@ export default class DetailPage extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  text:
+  textDesc:
   {
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
+    fontFamily: 'sans-serif-condensed',
+    fontSize: 18,
+    fontWeight: "400",
+    marginTop: '3%'
   },
   validationTxtBox:
   {
@@ -164,7 +168,8 @@ const styles = StyleSheet.create({
   equationParameters:
   {
     paddingVertical: 3,
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
+    marginTop: '3%'
   },
   input:
   {
@@ -202,5 +207,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     paddingHorizontal: 8
+  },
+  text:
+  {
+    paddingHorizontal: 8,
+    marginTop: '3%'
   }
 });
