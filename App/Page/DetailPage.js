@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button, StyleSheet} from "react-native";
 import CalculateEquations from "../Components/DetailPage/CalculateEquation.js";
-import HomePageComponents from '../components/DetailPageComponents.js';
+import DetailPageComponents from '../Components/DetailPageComponents.js';
 
 export default class DetailPage extends React.Component {
 
@@ -13,7 +13,7 @@ export default class DetailPage extends React.Component {
     super(props);
 
     this.equation = props.navigation.state.params.equation;
-
+    this.c = new DetailPageComponents();
     this.state={
       parameterArray: this.equation.parameters.map(a => a.value),
       parametersValidation: Array(this.equation.parameters.length).fill(""),
@@ -21,8 +21,12 @@ export default class DetailPage extends React.Component {
     }
   }
 
-  render() {
-  
+  render() {   
+    return(
+      <View>
+    {this.c.equationDisplay(this.state,this.equation, this.onParametersInput,this.onCalculatePress.bind(this) )}
+    </View>
+    );   
   }
 
   onParametersInput(index, text) {
@@ -63,21 +67,9 @@ export default class DetailPage extends React.Component {
        return
     }
 
-    /*
-
-    // Loop through the parameters and add expression in between.
-    for(let i = 0; i < this.state.parameterArray.length; i++){
-      if(this.state.parameterArray.length == 1) { // One parameter
-        calculateResult += this.state.parameterArray[i] + this.equation.expressions[i]
-      } else if (i == this.state.parameterArray.length-1) { // Check if the last parameter, then don't add an expression
-        calculateResult += this.state.parameterArray[i]
-      } else {
-        calculateResult += this.state.parameterArray[i] + this.equation.expressions[i]
-      }
-    } */
-    var c = new CalculateEquations();
+    var cd = new CalculateEquations();
     let calculateResult = ""
-    calculateResult = c.Calculate(this.state.parameterArray, this.equation);
+    calculateResult = cd.Calculate(this.state.parameterArray, this.equation);
 
     this.updateCalculateReulsts(calculateResult)
   }
