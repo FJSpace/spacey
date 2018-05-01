@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { View, StyleSheet, TextInput} from "react-native";
 import { List, ListItem, SearchBar } from "react-native-elements";
 import SortableListView from 'react-native-sortable-listview';
+import Ripple from 'react-native-material-ripple';
+
 
 export default class HomePageComponents {
 
@@ -36,15 +38,16 @@ export default class HomePageComponents {
 
   equationListItem(item, pressfunction, styles) {
     return (
-      <ListItem
-        title = {item.name}
-        titleStyle = {styles.listTitle}
-        subtitle = {item.equation}
-        subtitleStyle = {styles.listSubTitle}
-        containerStyle={styles.listItemContainer}
-        rightIcon={{ name: 'chevron-right' }}
-        onPress={()=> { pressfunction(item) }}
-      />
+      <Ripple onPress={()=> { pressfunction(item) }} rippleDuration={200} rippleSize={250}>
+        <ListItem
+          title = {item.name}
+          titleStyle = {styles.listTitle}
+          subtitle = {item.equation}
+          subtitleStyle = {styles.listSubTitle}
+          containerStyle={styles.listItemContainer}
+          rightIcon={{ name: 'chevron-right' }}
+        />
+      </Ripple>
     )
   }
 
