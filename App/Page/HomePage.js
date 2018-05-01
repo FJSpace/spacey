@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, ActivityIndicator, Dimensions, StyleSheet, AsyncStorage, Button} from "react-native";
 import { StackNavigator } from 'react-navigation';
-import HomePageComponents from '../components/HomePageComponents.js';
+import HomePageComponents from '../Components/HomePageComponents.js';
 
 var height = Dimensions.get('window').height;
 
