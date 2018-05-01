@@ -1,15 +1,26 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, Button, StyleSheet} from "react-native";
+import { View, Text, TextInput, StyleSheet} from "react-native";
 import {Kaede} from 'react-native-textinput-effects';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AwesomeButton from 'react-native-really-awesome-button';
+import {Button} from 'react-native-elements';
 
 
 export default class DetailPage extends React.Component {
 
-  static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.title}`,
-  });
+  static navigationOptions = ({ navigation }) => {
+    const params=navigation.state.params || {};
+    return{
+    headerTitle: `${navigation.state.params.title}`,
+    headerRight: (<Button onPress={()=>params.addtoFavorites()} backgroundColor= '#E73137' icon={{name: 'favorite'}}/>),
+    };
+  };
+
+  componentWillMount(){
+    this.props.navigation.setParams({add: this.addToFavorites()})
+  }
+
+  addToFavorites=()=>{}
 
   constructor(props) {
     super(props);
@@ -53,8 +64,8 @@ export default class DetailPage extends React.Component {
         <Text style={styles.text}>Fill in values & calculate!</Text>
 
         <View style={styles.res}>
-          <Text>{this.equation.equation} = </Text>
-          <Text>{this.state.calculateResult}</Text>
+          <Text style={styles.formu}>{this.equation.equation} = </Text>
+          <Text style={styles.out}>{this.state.calculateResult}</Text>
         </View>
         <AwesomeButton
           onPress={ () => this.onCalculatePress()}
@@ -156,10 +167,10 @@ const styles = StyleSheet.create({
   textDesc:
   {
     paddingHorizontal: 8,
-    fontFamily: 'sans-serif-condensed',
     fontSize: 18,
-    fontWeight: "400",
-    marginTop: '3%'
+    fontWeight: "500",
+    marginTop: '3%',
+    color: 'gray'
   },
   validationTxtBox:
   {
@@ -206,11 +217,23 @@ const styles = StyleSheet.create({
   {
     flex: 1,
     flexDirection: 'row',
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
+    marginTop: '10%'
   },
   text:
   {
     paddingHorizontal: 8,
     marginTop: '3%'
+  },
+  formu:
+  {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#0C3F7D'
+  },
+  out:
+  {
+    fontSize: 16,
+    color: '#E73137'
   }
 });

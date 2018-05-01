@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { View, Text, ActivityIndicator, Dimensions, StyleSheet, AsyncStorage, Button} from "react-native";
 import { StackNavigator } from 'react-navigation';
 import HomePageComponents from '../components/HomePageComponents.js';
+import AwesomeButton from 'react-native-really-awesome-button';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 var height = Dimensions.get('window').height;
 
@@ -50,6 +52,7 @@ export default class HomePage extends React.Component {
       isSearching: false,
       isLoading: false,
       text: '',
+      fav: null,
     }
 
     // The order is stored in index.
@@ -148,6 +151,16 @@ export default class HomePage extends React.Component {
 
     return (
       <View style={styles.MainContainer}>
+        <View style={{flexDirection: 'row', marginBottom: 3}}>
+          <AwesomeButton style={styles.allButton} backgroundColor= '#B7B9B8'>
+            <Icon name='tasks' color='#0C3F7D' style={{margin: '5%'}}/>
+            <Text style={styles.a}>All</Text>
+          </AwesomeButton>
+          <AwesomeButton style={styles.favButton} backgroundColor= '#B7B9B8'>
+            <Icon name='heart-o' color='#E73137' style={{margin: '5%'}}/>
+            <Text style={styles.f}>Favorites</Text>
+          </AwesomeButton>
+        </View>
         {this.c.searchInput(this.state, this.SearchFilterFunction.bind(this), styles)}
         {this.c.equationSortList(this.state, this.onRowMoved.bind(this), this.onItemPress.bind(this), styles)}
       </View>
@@ -183,10 +196,12 @@ const styles = StyleSheet.create({
      justifyContent: 'center',
      flex:1,
      margin: 7,
+     flexDirection: 'column'
    },
 
   listItemContainer: {
-    borderBottomWidth: 0
+    borderBottomWidth: 1,
+    borderBottomColor: '#2d85dd'
   },
 
   listTitle: {
@@ -207,6 +222,33 @@ const styles = StyleSheet.create({
   StateLoading:{
     flex: 1,
     paddingTop: 20
-  }
+  },
 
+  listSubTitle:
+  {
+    fontSize: 15,
+    color: 'gray'
+  },
+  allButton:
+  {
+    margin: 2,
+    flex: 1, 
+  },
+  favButton:
+  {
+    margin: 2,
+    flex: 1, 
+  },
+  a:
+  {
+    fontSize: 15,
+    color: '#0C3F7D',
+    margin: '5%'
+  },
+  f:
+  {
+    fontSize:15,
+    color: '#E73137',
+    margin: '5%'
+  }
 });
