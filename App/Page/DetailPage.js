@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button, StyleSheet} from "react-native";
+import {Kaede} from 'react-native-textinput-effects';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import AwesomeButton from 'react-native-really-awesome-button';
+
 
 export default class DetailPage extends React.Component {
 
@@ -15,7 +19,7 @@ export default class DetailPage extends React.Component {
     this.state={
       parameterArray: this.equation.parameters.map(a => a.value),
       parametersValidation: Array(this.equation.parameters.length).fill(""),
-      calculateResult: "Fill in values & calculate!"
+      calculateResult: ""
     }
   }
 
@@ -25,16 +29,13 @@ export default class DetailPage extends React.Component {
     for(let i = 0; i < this.equation.parameters.length; i++){
       payments.push(
         <View key={i}>
-          <Text>{this.equation.parameters[i].var}</Text>
-          <TextInput
-            style={ [
-              styles.equation,
-              {borderColor: (!this.state.parametersValidation[i] ? 'gray' : 'red')}
-            ]}
-            onChangeText={(text) => this.onParametersInput(i, text)}
+          <Kaede label={this.equation.parameters[i].var}
             value={this.state.parameterArray[i]}
             keyboardType={'numeric'}
-          />
+            onChangeText={(text)=>this.onParametersInput(i,text)}
+            style={styles.input}
+            labelStyle={styles.label}
+            inputStyle={styles.istyle}/>
           {!!this.state.parametersValidation[i] && (
             <Text style={styles.validationTxtBox}>{this.state.parametersValidation[i]}</Text>
           )}
@@ -42,21 +43,25 @@ export default class DetailPage extends React.Component {
     }
 
     return (
-      <View>
-        <Text>{this.equation.name}</Text>
-        <Text>{this.equation.description}</Text>
-        <Text>{this.equation.equation}</Text>
+      <View style={styles.equationPa}>
+        <Text style={styles.textDesc}>{this.equation.description}</Text>
 
         <View style={styles.equationParameters}>
           {payments}
         </View>
 
-        <Text>{this.state.calculateResult}</Text>
+        <Text style={styles.text}>Fill in values & calculate!</Text>
 
-        <Button
+        <View style={styles.res}>
+          <Text>{this.equation.equation} = </Text>
+          <Text>{this.state.calculateResult}</Text>
+        </View>
+        <AwesomeButton
           onPress={ () => this.onCalculatePress()}
-          title="Calculate"
-        />
+          style={styles.aweBut}>
+          <Icon name='calculator' color='#E73137' size={27} style={{margin: '8%'}}/>
+          <Text style={styles.butText}>Calculate</Text>
+        </AwesomeButton>
       </View>
     )
   }
@@ -148,10 +153,12 @@ export default class DetailPage extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  equation:
+  textDesc:
   {
-    height: 40,
-    borderWidth: 1,
+    paddingHorizontal: 8,
+    fontSize: 18,
+    fontWeight: "400",
+    marginTop: '3%'
   },
   validationTxtBox:
   {
@@ -159,7 +166,50 @@ const styles = StyleSheet.create({
   },
   equationParameters:
   {
-    paddingVertical: 16,
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    marginTop: '3%'
+  },
+  input:
+  {
+    marginTop: 3
+  },
+  label:
+  {
+    color: '#0C3F7D',
+    backgroundColor: '#B7B9B8'
+  },
+  istyle:
+  {
+    backgroundColor:'#d3d6d4',
+    color:'#2d85dd'
+  },
+  equationPa:
+  {
+    flex: 1,
+    flexDirection: 'column'
+  },
+  aweBut:
+  {
+    alignSelf: 'center',
+    backgroundColor: '#B7B9B8',
+    marginBottom: 3
+  },
+  butText:
+  {
+    fontSize: 20,
+    color: '#0C3F7D',
+    margin: '8%'
+  },
+  res:
+  {
+    flex: 1,
+    flexDirection: 'row',
     paddingHorizontal: 8
   },
+  text:
+  {
+    paddingHorizontal: 8,
+    marginTop: '3%'
+  }
 });
