@@ -7,7 +7,7 @@ import Ripple from 'react-native-material-ripple';
 
 export default class HomePageComponents {
 
-  searchInput(state, onChangeFunction, styles) {
+  searchInput(state, onChangeFunction) {
     return (
       <TextInput
          style={styles.TextInputStyleClass}
@@ -19,24 +19,24 @@ export default class HomePageComponents {
     )
   }
 
-  equationSortList(state, onRowMoved, onItemPress, styles) {
+  equationSortList(state, onRowMoved, onItemPress) {
     return (
       <SortableListView
         style={{ flex: 1 }}
         data={state.equations}
         order={state.filterOrder}
-        disableSorting= {!state.isOrder}
+        disableSorting= {state.isSearching}
         onRowMoved={e => {
           onRowMoved(e)
         }}
         renderRow={ item  => (
-            this.equationListItem(item, onItemPress, styles)
+            this.equationListItem(item, onItemPress)
           )}
       />
     )
   }
 
-  equationListItem(item, pressfunction, styles) {
+  equationListItem(item, pressfunction) {
     return (
       <Ripple onPress={()=> { pressfunction(item) }} rippleDuration={200} rippleSize={250}>
         <ListItem
@@ -52,3 +52,31 @@ export default class HomePageComponents {
   }
 
 }
+
+const styles = StyleSheet.create({
+  MainContainer : {
+     justifyContent: 'center',
+     flex:1,
+     margin: 7,
+   },
+
+  listItemContainer: {
+    borderBottomWidth: 0
+  },
+
+  listTitle: {
+    fontSize: 30,
+    paddingTop: 10,
+    paddingBottom: 10
+  },
+
+  TextInputStyleClass :{
+   textAlign: 'center',
+   height: 40,
+   borderWidth: 1,
+   borderColor: '#009688',
+   borderRadius: 7 ,
+   backgroundColor : "#FFFFFF"
+  },
+
+});

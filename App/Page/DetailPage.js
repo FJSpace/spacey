@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
   textDesc:
   {
     paddingHorizontal: 8,
-    fontFamily: 'sans-serif-condensed',
     fontSize: 18,
     fontWeight: "400",
     marginTop: '3%'
