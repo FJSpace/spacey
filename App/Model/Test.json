@@ -28,5 +28,17 @@
       {"var":"m", "value":"5"},
       {"var":"v", "value":"5..5"}],
     "expressions": ["*"]
-  }
+  },
+  "Parsing": {
+    "equation": "K=mv+mp*c-e/f",
+    "parameters": [
+      {"var": "mv", "value": "0"},
+      {"var": "mp", "value": "0"},
+      {"var": "c", "value": "0"},
+      {"var": "e", "value": "0"},
+      {"var": "f", "value": "0"}
+    ],
+    "expressions": ["+", "*", "-", "/"]
+  },
+  "EasyParse": {"equation": "K=mv+mp*c-e/f"}
   }
