@@ -24,7 +24,7 @@ export default class DetailPage extends React.Component {
   render() {   
     return(
       <View>
-    {this.c.equationDisplay(this.state,this.equation, this.onParametersInput.bind(this),this.onCalculatePress.bind(this) )}
+    {this.c.equationDisplay(this.state,this.equation, this.onParametersInput.bind(this),this.onCalculatePress.bind(this),styles )}
     </View>
     );   
   }

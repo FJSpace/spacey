@@ -6,7 +6,7 @@ import { List, ListItem } from "react-native-elements";
 export default class DetailPageComponents {
 
 
-equationDisplay(state,equation, onParametersInput, onCalculatePress)
+equationDisplay(state,equation, onParametersInput, onCalculatePress, styles)
 {
   let equationParams = [];
   //let params = [];
@@ -44,22 +44,3 @@ equationDisplay(state,equation, onParametersInput, onCalculatePress)
      </View>)
   }
 }
-  
-    
-
-    const styles = StyleSheet.create({
-      equation:
-      {
-        height: 40,
-        borderWidth: 1,
-      },
-      validationTxtBox:
-      {
-        color: 'red',
-      },
-      equationParameters:
-      {
-        paddingVertical: 16,
-        paddingHorizontal: 8
-      },
-    });
