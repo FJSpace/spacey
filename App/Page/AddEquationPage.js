@@ -8,6 +8,15 @@ export default class AddEquationPage extends Component {
     title: "Add Equation",
   });
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      equationInput: '',
+      equation: {
+      }
+    };
+  }
+
   parseJSON = (equation) => {
     const OPERANDS = ['+', '-', '*', '/'];
     const equationObject = {
@@ -55,10 +64,29 @@ export default class AddEquationPage extends Component {
     return equationObject;
   }
 
+  submitEquationHandler = () => {
+    const equationString = this.state.equationInput;
+    const equationObject = this.parseJSON(equationString);
+    this.setState({equation: equationObject});
+  }
+
   render() {
     return (
       <View>
         <Text>Add Equation</Text>
+        <TextInput
+          placeholder = 'Ex: K=m*v'
+          style = {{height: 20}}
+          onChangeText = {(text) => this.setState({equationInput: text})}>
+        </TextInput>
+        <Text
+          style = {{fontSize: 20, color: 'black'}} >
+          {JSON.stringify(this.state.equation)}
+        </Text>
+        <Button
+          onPress = {this.submitEquationHandler}
+          title = "Submit"
+        />
       </View>
     );
   }
