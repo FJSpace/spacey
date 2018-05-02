@@ -3,11 +3,13 @@ import { View, Text } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import HomePage from './Page/HomePage.js'
 import DetailPage from './Page/DetailPage.js'
+import AddEquationPage from './Page/AddEquationPage.js'
 
 
 const RootStack = StackNavigator({
   Home: { screen: HomePage },
   Detail: { screen: DetailPage },
+  AddEquation: { screen: AddEquationPage },
 },
 {
   initialRouteName: 'Home',
