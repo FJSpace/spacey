@@ -17,7 +17,7 @@ export default class DetailPage extends React.Component {
     this.state={
       parameterArray: this.equation.parameters.map(a => a.value),
       parametersValidation: Array(this.equation.parameters.length).fill(""),
-      calculateResult: "Fill in values & calculate!"
+      calculateResult: ""
     }
   }
 
@@ -107,10 +107,13 @@ export default class DetailPage extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  equation:
+  textDesc:
   {
-    height: 40,
-    borderWidth: 1,
+    paddingHorizontal: 8,
+    fontSize: 18,
+    fontWeight: "500",
+    marginTop: '3%',
+    color: 'gray'
   },
   validationTxtBox:
   {
@@ -118,7 +121,61 @@ const styles = StyleSheet.create({
   },
   equationParameters:
   {
-    paddingVertical: 16,
-    paddingHorizontal: 8
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    marginTop: '3%'
   },
+  input:
+  {
+    marginTop: 3
+  },
+  label:
+  {
+    color: '#0C3F7D',
+    backgroundColor: '#B7B9B8'
+  },
+  istyle:
+  {
+    backgroundColor:'#d3d6d4',
+    color:'#2d85dd'
+  },
+  equationPa:
+  {
+    flexDirection: 'column'
+  },
+  aweBut:
+  {
+    alignSelf: 'center',
+    backgroundColor: '#B7B9B8',
+    marginBottom: 3,
+    marginTop: '10%'
+  },
+  butText:
+  {
+    fontSize: 20,
+    color: '#0C3F7D',
+    margin: '8%'
+  },
+  res:
+  {
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    marginTop: '10%'
+  },
+  text:
+  {
+    paddingHorizontal: 8,
+    marginTop: '3%'
+  },
+  formu:
+  {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#0C3F7D'
+  },
+  out:
+  {
+    fontSize: 16,
+    color: '#E73137'
+  }
 });
