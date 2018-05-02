@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, ActivityIndicator, AsyncStorage } from "react-native";
 import { Icon } from "react-native-elements";
 import { StackNavigator } from 'react-navigation';
-import HomePageComponents from '../Components/HomePageComponents.js';
+import HomePageComponents from '../components/HomePageComponents.js';
 
 export default class HomePage extends React.Component {
 
@@ -60,8 +60,8 @@ export default class HomePage extends React.Component {
     }
 
     this.setState({
-      order: ["0","1"],
-      filterOrder: ["0","1"]
+      order: order,
+      filterOrder: order
     })
   }
 
