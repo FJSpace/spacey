@@ -11,19 +11,21 @@ export default class AddEquationPage extends Component {
       expressions: []
     };
 
+    const refinedEquation = equation.replace(/\s/g,'');
+
     let looper = 0;
 
     while(true) {
-      if (equation[looper] === "=") {
+      if (refinedEquation[looper] === "=") {
         break;
       }
       looper++;
     }
 
-    for (let x = looper + 1; x < equation.length; x++) {
+    for (let x = looper + 1; x < refinedEquation.length; x++) {
       // if encounter an operand, add to the expression array in the equation object.
-      if (OPERANDS.includes(equation[x])) {
-        equationObject.expressions.push(equation[x]);
+      if (OPERANDS.includes(refinedEquation[x])) {
+        equationObject.expressions.push(refinedEquation[x]);
       } else {
         // else if encountering a letter, add to parameter array.
         let parameterArray = [];
@@ -31,14 +33,14 @@ export default class AddEquationPage extends Component {
         // while next character != operand, join characters to one single parameter.
         while (true) {
 
-          if (OPERANDS.includes(equation[x])) {
+          if (OPERANDS.includes(refinedEquation[x])) {
             x--;
             break;
-          } else if (!equation[x]) {
+          } else if (!refinedEquation[x]) {
             break;
           }
 
-          parameterArray.push(equation[x]);
+          parameterArray.push(refinedEquation[x]);
           x++;
         }
 
@@ -50,7 +52,9 @@ export default class AddEquationPage extends Component {
 
   render() {
     return (
-      <div></div>
+      <View>
+        <Text>Add Equation</Text>
+      </View>
     );
   }
 

@@ -35,4 +35,13 @@ describe('Parsing tests', () => {
 
     expect(parsed["parameters"]).toEqual(parsedObject["parameters"]);
   })
+
+  test('test if input string can handle spaces', () => {
+    const data = require('../Model/Test.json');
+    const parsedObject = data["Parsing"];
+    const component = new AddEquationPage();
+    const parsed = component.parseJSON("K= mv +mp*c-e/f");
+
+    expect(parsed["parameters"]).toEqual(parsedObject["parameters"]);
+  })
 });
