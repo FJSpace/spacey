@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, AsyncStorage, Button} from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, AsyncStorage } from "react-native";
+import { Icon } from "react-native-elements";
 import { StackNavigator } from 'react-navigation';
 import HomePageComponents from '../components/HomePageComponents.js';
 
@@ -7,6 +8,14 @@ export default class HomePage extends React.Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: "Equations",
+    headerRight: (
+      <Icon
+        name='playlist-add'
+        onPress={() =>  alert('Add Equation!!')}
+        color='#0C3F7D'
+        iconStyle={{paddingRight: 8}}
+      />
+    ),
   });
 
   constructor(props) {
