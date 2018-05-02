@@ -11,7 +11,7 @@ export default class HomePage extends React.Component {
     headerRight: (
       <Icon
         name='playlist-add'
-        onPress={() =>  alert('Add Equation!!')}
+        onPress={() =>  navigation.navigate('AddEquation') }
         color='#0C3F7D'
         iconStyle={{paddingRight: 8}}
       />

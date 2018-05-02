@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button, StyleSheet} from "react-native";
+import { StackNavigator } from 'react-navigation';
 
 export default class AddEquationPage extends Component {
+
+  static navigationOptions = ({ navigation }) => ({
+    title: "Add Equation",
+  });
 
   parseJSON = (equation) => {
     const OPERANDS = ['+', '-', '*', '/'];
@@ -50,7 +55,8 @@ export default class AddEquationPage extends Component {
 
   render() {
     return (
-      <div></div>
+      <View>
+      </View>
     );
   }
 
