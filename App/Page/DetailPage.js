@@ -3,6 +3,8 @@ import { View, Text, TextInput, Button, StyleSheet} from "react-native";
 import CalculateEquations from "../components/DetailPage/CalculateEquation.js";
 import DetailPageComponents from '../components/DetailPageComponents.js';
 
+/*TestComment*/
+
 export default class DetailPage extends React.Component {
 
   static navigationOptions = ({ navigation }) => ({
