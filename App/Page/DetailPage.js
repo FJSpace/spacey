@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button, StyleSheet} from "react-native";
-import CalculateEquations from "../Components/DetailPage/CalculateEquation.js";
-import DetailPageComponents from '../Components/DetailPageComponents.js';
+import CalculateEquations from "../components/DetailPage/CalculateEquation.js";
+import DetailPageComponents from '../components/DetailPageComponents.js';
 
 export default class DetailPage extends React.Component {
 
