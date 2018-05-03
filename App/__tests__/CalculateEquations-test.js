@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow, mount, render } from 'enzyme';
 import App from '../App';
 import renderer from 'react-test-renderer';
-import CE from '../components/DetailPage/CalculateEquation'
+import CE from '../components/DetailPage/DetailPageFunctionality'
 
 describe('Testing "CalculateEquation"', () => {
   test('Testing so that "CalculateEquation" gives the correct value', () => {

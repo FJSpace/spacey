@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView, TextInput, StyleSheet } from "react-native";
+import { View, Text, ScrollView, KeyboardAvoidingView, TextInput, StyleSheet } from "react-native";
 import { Kaede } from 'react-native-textinput-effects';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AwesomeButton from 'react-native-really-awesome-button';

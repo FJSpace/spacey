@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, Button, StyleSheet} from "react-native";
-import CalculateEquations from "../components/DetailPage/CalculateEquation.js";
+import CalculateEquations from "../components/DetailPage/DetailPageFunctionality";
 import DetailPageComponents from '../components/DetailPageComponents.js';
 
 /*TestComment*/
@@ -50,8 +50,12 @@ export default class DetailPage extends React.Component {
     })
   }
 
+
+ 
   updateDefaultValues(){
-    this.updateCalculateReulsts("Updating default...")
+
+    var cd = new CalculateEquations();
+    cd.updateDefaultValues(this.equation, this.state.parameterArray);
     return
   }
 
