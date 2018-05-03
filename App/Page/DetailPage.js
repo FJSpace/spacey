@@ -26,7 +26,7 @@ export default class DetailPage extends React.Component {
   render() {   
     return(
       <View>
-    {this.c.equationDisplay(this.state,this.equation, this.onParametersInput.bind(this),this.onCalculatePress.bind(this),styles )}
+    {this.c.equationDisplay(this.state,this.equation, this.onParametersInput.bind(this),this.onCalculatePress.bind(this), this.updateDefaultValues.bind(this), styles )}
     </View>
     );   
   }
@@ -50,6 +50,10 @@ export default class DetailPage extends React.Component {
     })
   }
 
+  updateDefaultValues(){
+    this.updateCalculateReulsts("Updating default...")
+    return
+  }
 
   onCalculatePress() {
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, Text, ScrollView, TextInput, StyleSheet } from "react-native";
 import { Kaede } from 'react-native-textinput-effects';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AwesomeButton from 'react-native-really-awesome-button';
@@ -9,7 +9,7 @@ import { Button } from 'react-native-elements';
 export default class DetailPageComponents {
 
 
-  equationDisplay(state, equation, onParametersInput, onCalculatePress, styles) {
+  equationDisplay(state, equation, onParametersInput, onCalculatePress, updateDefaultValues, styles) {
     let equationParams = [];
     //let params = [];
     for (let i = 0; i < equation.parameters.length; i++) {
@@ -28,6 +28,7 @@ export default class DetailPageComponents {
         </View>)
     }
     return (
+      <ScrollView>
       <View style={styles.equationPa}>
         <Text style={styles.textDesc}>{equation.description}</Text>
 
@@ -47,6 +48,11 @@ export default class DetailPageComponents {
           <Icon name='calculator' color='#E73137' size={27} style={{ margin: '8%' }} />
           <Text style={styles.butText}>Calculate</Text>
         </AwesomeButton>
-      </View>)
+        <AwesomeButton
+        onPress={() => updateDefaultValues()}
+          style={styles.aweBut}>
+          <Text style={styles.butText}>Update default values</Text>
+        </AwesomeButton>
+      </View></ScrollView>)
   }
 }
