@@ -33,10 +33,30 @@ export default class HomePage extends React.Component {
       text: '',
     }
 
+    this.getStorage();
     // The order is stored in index.
     this.setOrder()
 
     this.c = new HomePageComponents()
+  }
+
+  async getStorage() {
+    var newEq = []
+    
+    for(let i=0; i<this.state.equations.length; i++){
+      try{
+        const value = await AsyncStorage.getItem('@MySuperStore:'+i);
+        if (value != null){
+          newEq[i] = JSON.parse(value);
+        } else {
+          newEq[i] = this.state.equations[i];
+        }
+      }catch (error) {
+        newEq[i] = this.state.equations[i];
+      }
+    }
+    this.state.equations = newEq;
+    return
   }
 
   // Fetch the order from the locale storage. If there is none there, use standard.

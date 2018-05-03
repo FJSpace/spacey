@@ -3,8 +3,8 @@ import {AsyncStorage} from "react-native";
 
 export default class CalculateEquations extends React.Component {
 
-Calculate(equationParams, equation) 
-{
+  Calculate(equationParams, equation) 
+  {
     let calculateResult = equation.equation.split("=")[1];
 
     for(let i = 0; i < equationParams.length; i++){
@@ -17,7 +17,7 @@ Calculate(equationParams, equation)
   {
       for(i = 0; i < equation.parameters.length; i++ )
       {
-          equation.parameters[i].val = defaultValues[i];
+          equation.parameters[i].value = defaultValues[i];
       }
      
       // Update the default values for the equation in the asyncstorage
