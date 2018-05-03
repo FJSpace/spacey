@@ -12,6 +12,8 @@ export default class AddEquationPage extends Component {
     super(props);
     this.state = {
       equationInput: '',
+      equationTitle: '',
+      equationDescription: '',
       equation: {
       }
     };
@@ -73,12 +75,30 @@ export default class AddEquationPage extends Component {
   render() {
     return (
       <View>
-        <Text>Add Equation</Text>
+        <Text style = {styles.title}>Add Equation</Text>
+        <TextInput
+          placeholder = 'Equation name'
+          style = {styles.input}
+          onChangeText = {(text) => this.setState({equationTitle: text})}>
+        </TextInput>
+        <TextInput
+          placeholder = 'Equation description'
+          style = {styles.input}
+          onChangeText = {(text) => this.setState({equationDescription: text})}>
+        </TextInput>
         <TextInput
           placeholder = 'Ex: K=m*v'
-          style = {{height: 20}}
+          style = {styles.input}
           onChangeText = {(text) => this.setState({equationInput: text})}>
         </TextInput>
+        <Text
+          style = {{fontSize: 20, color: 'black'}} >
+          {this.state.equationTitle}
+        </Text>
+        <Text
+          style = {{fontSize: 20, color: 'black'}} >
+          {this.state.equationDescription}
+        </Text>
         <Text
           style = {{fontSize: 20, color: 'black'}} >
           {JSON.stringify(this.state.equation)}
@@ -92,3 +112,25 @@ export default class AddEquationPage extends Component {
   }
 
 }
+
+  const styles = StyleSheet.create({
+    input:
+    {
+      backgroundColor:'#d3d6d4',
+      color:'#2d85dd',
+      height: 40,
+      padding: 10,
+      marginTop: 5,
+      marginBottom: 5,
+      marginLeft: 10,
+      marginRight: 10
+    },
+    title:
+    {
+      color: '#0C3F7D',
+      textAlign: 'center',
+      fontSize: 30,
+      marginTop: 20,
+      marginBottom: 20
+    }
+  });
