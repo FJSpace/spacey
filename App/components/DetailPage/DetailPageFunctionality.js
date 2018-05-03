@@ -13,19 +13,22 @@ Calculate(equationParams, equation)
     return eval(calculateResult);
   }
 
-  updateDefaultValues(equation, defaultValues) 
+  async updateDefaultValues(equation, defaultValues) 
   {
       for(i = 0; i < equation.parameters.length; i++ )
       {
           equation.parameters[i].val = defaultValues[i];
       }
+     
       // Update the default values for the equation in the asyncstorage
-      try {
-          AsyncStorage.setItem(string.concat('@MySuperStore:',equation.id), JSON.stringify(equation));
+      
+      try {     
+        await AsyncStorage.setItem('@MySuperStore:'+equation.id), JSON.stringify(this.equation);
+        alert("success")
         } catch (error) {
           console.log("Fail to store equation order!")
+          alert("error")
         }
-        
      return
   }
 }
