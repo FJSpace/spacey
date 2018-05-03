@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AsyncStorage from "react-native";
+import {AsyncStorage} from "react-native";
 
 export default class CalculateEquations extends React.Component {
 
@@ -23,7 +23,7 @@ Calculate(equationParams, equation)
       // Update the default values for the equation in the asyncstorage
       
       try {     
-        await AsyncStorage.setItem('@MySuperStore:'+equation.id), JSON.stringify(this.equation);
+        await AsyncStorage.setItem('@MySuperStore:'+equation.id, JSON.stringify(equation));
         alert("success")
         } catch (error) {
           console.log("Fail to store equation order!")
