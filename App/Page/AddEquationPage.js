@@ -68,7 +68,14 @@ export default class AddEquationPage extends Component {
 
   submitEquationHandler = () => {
     const equationString = this.state.equationInput;
-    const equationObject = this.parseJSON(equationString);
+    const parsedEquation = this.parseJSON(equationString);
+    const equationObject = {
+      name: this.state.equationTitle,
+      description: this.state.equationDescription,
+      equation: parsedEquation["equation"],
+      parameters: parsedEquation["parameters"],
+      expressions: parsedEquation["expressions"]
+    };
     this.setState({equation: equationObject});
   }
 
@@ -91,14 +98,6 @@ export default class AddEquationPage extends Component {
           style = {styles.input}
           onChangeText = {(text) => this.setState({equationInput: text})}>
         </TextInput>
-        <Text
-          style = {{fontSize: 20, color: 'black'}} >
-          {this.state.equationTitle}
-        </Text>
-        <Text
-          style = {{fontSize: 20, color: 'black'}} >
-          {this.state.equationDescription}
-        </Text>
         <Text
           style = {{fontSize: 20, color: 'black'}} >
           {JSON.stringify(this.state.equation)}
