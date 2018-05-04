@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, Button, StyleSheet} from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, AsyncStorage} from "react-native";
 import { StackNavigator } from 'react-navigation';
 
 export default class AddEquationPage extends Component {
@@ -77,7 +77,9 @@ export default class AddEquationPage extends Component {
       expressions: parsedEquation["expressions"]
     };
     this.setState({equation: equationObject});
+    this.storeNewEquation();
   }
+  
 
   render() {
     return (
@@ -108,6 +110,32 @@ export default class AddEquationPage extends Component {
         />
       </View>
     );
+  }
+  async storeNewEquation() {
+    var added = [];
+    
+    try{
+      const value = await AsyncStorage.getItem('@MySuperStore:added');
+      if (value != null){
+         added = JSON.parse(value);
+         console.log(added);
+         added.push(this.state.equation);
+      } else {
+        added.push(this.state.equation);
+      }
+    } catch (error) {
+      console.log("Something whent wrong when trying to fetch data");
+    }
+    // Update the default values for the equation in the asyncstorage
+      
+    try {     
+      await AsyncStorage.setItem('@MySuperStore:added', JSON.stringify(added));
+      alert("success")
+      } catch (error) {
+        console.log("Fail to store new equation!")
+        alert("error")
+      }
+    return
   }
 
 }

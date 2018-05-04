@@ -41,21 +41,38 @@ export default class HomePage extends React.Component {
   }
 
   async getStorage() {
-    var newEq = []
+    var editedEq = [];
+    var addedEq = [];
+    var newEq = {};
     
     for(let i=0; i<this.state.equations.length; i++){
       try{
-        const value = await AsyncStorage.getItem('@MySuperStore:'+i);
-        if (value != null){
-          newEq[i] = JSON.parse(value);
+        const edited = await AsyncStorage.getItem('@MySuperStore:'+i);
+        if (edited != null){
+          editedEq[i] = JSON.parse(edited);
         } else {
-          newEq[i] = this.state.equations[i];
+          editedEq[i] = this.state.equations[i];
         }
       }catch (error) {
-        newEq[i] = this.state.equations[i];
+        editedEq[i] = this.state.equations[i];
       }
     }
-    this.state.equations = newEq;
+    this.state.equations = editedEq;
+    
+    var size = this.state.equations.length;
+    try{
+      const added = await AsyncStorage.getItem('@MySuperStore:added');
+      if (added != null){
+        addedEq.push(JSON.parse(added));
+      }
+    } catch(error) {
+      console.log('Something whent wrong when trying to find added equations');
+    }
+    for(let i = 0; i < addedEq.length; i++){
+      newEq = addedEq[i];
+      newEq.id = size + i;
+      this.state.equations.push(newEq);
+    }
     return
   }
 
