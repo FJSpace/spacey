@@ -41,39 +41,48 @@ export default class HomePage extends React.Component {
   }
 
   async getStorage() {
-    var editedEq = [];
     var addedEq = [];
     var newEq = {};
+    var allEq = this.state.equations;
     
-    for(let i=0; i<this.state.equations.length; i++){
+    for(let i = 0; i < allEq.length; i++){
       try{
         const edited = await AsyncStorage.getItem('@MySuperStore:'+i);
         if (edited != null){
-          editedEq[i] = JSON.parse(edited);
+          allEq[i] = JSON.parse(edited);
         } else {
-          editedEq[i] = this.state.equations[i];
+          allEq[i] = this.state.equations[i];
         }
       }catch (error) {
-        editedEq[i] = this.state.equations[i];
+        allEq[i] = this.state.equations[i];
       }
     }
-    this.state.equations = editedEq;
     
     var size = this.state.equations.length;
     try{
       const added = await AsyncStorage.getItem('@MySuperStore:added');
       if (added != null){
-        addedEq.push(JSON.parse(added));
+        addedEq = JSON.parse(added);
       }
     } catch(error) {
       console.log('Something whent wrong when trying to find added equations');
     }
     for(let i = 0; i < addedEq.length; i++){
       newEq = addedEq[i];
-      newEq.id = size + i;
-      this.state.equations.push(newEq);
+      if(newEq.id == null){
+        newEq.id = size + i;
+        allEq.push(newEq);
+        try {
+          await AsyncStorage.setItem('@MySuperStore:'+newEq.id, JSON.stringify(newEq));
+        } catch (error) {
+          console.log("Fail to store new equation!")
+          alert("error")
+        }
+      }
     }
-    return
+    this.setState({
+      equations: allEq
+    })
   }
 
   // Fetch the order from the locale storage. If there is none there, use standard.

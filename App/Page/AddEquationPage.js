@@ -118,7 +118,6 @@ export default class AddEquationPage extends Component {
       const value = await AsyncStorage.getItem('@MySuperStore:added');
       if (value != null){
          added = JSON.parse(value);
-         console.log(added);
          added.push(this.state.equation);
       } else {
         added.push(this.state.equation);
@@ -126,15 +125,14 @@ export default class AddEquationPage extends Component {
     } catch (error) {
       console.log("Something whent wrong when trying to fetch data");
     }
-    // Update the default values for the equation in the asyncstorage
-      
-    try {     
+    // Store added equations  
+    try {
       await AsyncStorage.setItem('@MySuperStore:added', JSON.stringify(added));
       alert("success")
       } catch (error) {
         console.log("Fail to store new equation!")
         alert("error")
-      }
+    }
     return
   }
 
