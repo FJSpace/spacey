@@ -1,15 +1,25 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, Button, StyleSheet} from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, AsyncStorage} from "react-native";
 import CalculateEquations from "../components/DetailPage/DetailPageFunctionality";
 import DetailPageComponents from '../components/DetailPageComponents.js';
+import {Icon} from 'react-native-elements';
 
 /*TestComment*/
 
 export default class DetailPage extends React.Component {
 
   static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.title}`,
+      title: `${navigation.state.params.title}`,
   });
+
+  addToFavorites(){
+    try{
+       AsyncStorage.setItem('@MySuperStore: favid', JSON.stringify(this.equation.id));
+     }
+     catch(error){
+       alert("Fail")
+     }
+  }
 
   constructor(props) {
     super(props);
@@ -21,12 +31,13 @@ export default class DetailPage extends React.Component {
       parametersValidation: Array(this.equation.parameters.length).fill(""),
       calculateResult: ""
     }
+    f=null
   }
 
   render() {   
     return(
       <View>
-    {this.c.equationDisplay(this.state,this.equation, this.onParametersInput.bind(this),this.onCalculatePress.bind(this), this.updateDefaultValues.bind(this), styles )}
+    {this.c.equationDisplay(this.state,this.equation, this.onParametersInput.bind(this),this.onCalculatePress.bind(this), this.updateDefaultValues.bind(this), styles, this.addToFavorites.bind(this) )}
     </View>
     );   
   }
@@ -153,12 +164,34 @@ const styles = StyleSheet.create({
   {
     flexDirection: 'column'
   },
-  aweBut:
+  aweButL:
   {
     alignSelf: 'center',
     backgroundColor: '#B7B9B8',
     marginBottom: 3,
-    marginTop: '10%'
+    marginTop: '8%',
+    width: 170,
+    marginLeft: '2%',
+    marginRight: '1%',
+    flex: 1
+  },
+  aweButR:
+  {
+    alignSelf: 'center',
+    backgroundColor: '#B7B9B8',
+    marginBottom: 3,
+    marginTop: '8%',
+    marginRight: '3%',
+    width: 170,
+    marginLeft: '1%',
+    flex: 1
+  },
+  butText1:
+  {
+    fontSize: 20,
+    color: '#0C3F7D',
+    margin: '8%',
+    marginLeft: '3%'
   },
   butText:
   {
@@ -174,6 +207,7 @@ const styles = StyleSheet.create({
   },
   text:
   {
+    flexDirection: 'row',
     paddingHorizontal: 8,
     marginTop: '3%'
   },

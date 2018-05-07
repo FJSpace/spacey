@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { View, Text, ScrollView, KeyboardAvoidingView, TextInput, StyleSheet } from "react-native";
 import { Kaede } from 'react-native-textinput-effects';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon1 from 'react-native-vector-icons/FontAwesome';
 import AwesomeButton from 'react-native-really-awesome-button';
-import { Button } from 'react-native-elements';
+import { Button, Icon } from 'react-native-elements';
 
 
 export default class DetailPageComponents {
 
 
-  equationDisplay(state, equation, onParametersInput, onCalculatePress, updateDefaultValues, styles) {
+  equationDisplay(state, equation, onParametersInput, onCalculatePress, updateDefaultValues, styles, addToFav) {
     let equationParams = [];
     //let params = [];
     for (let i = 0; i < equation.parameters.length; i++) {
@@ -36,23 +36,28 @@ export default class DetailPageComponents {
           {equationParams}
         </View>
 
-        <Text style={styles.text}>Fill in values & calculate!</Text>
+        <View style={styles.text}>
+          <Text style={{flex:2}}>Fill in values & calculate!</Text>
+          <Icon onPress={() => addToFav()} name='favorite' color='#E73137' style={{flex:1}}/>
+        </View>
 
         <View style={styles.res}>
           <Text style={styles.formu}>{equation.equation} = </Text>
           <Text style={styles.out}>{state.calculateResult}</Text>
         </View>
-        <AwesomeButton
-          onPress={() => onCalculatePress()}
-          style={styles.aweBut}>
-          <Icon name='calculator' color='#E73137' size={27} style={{ margin: '8%' }} />
-          <Text style={styles.butText}>Calculate</Text>
-        </AwesomeButton>
-        <AwesomeButton
-        onPress={() => updateDefaultValues()}
-          style={styles.aweBut}>
-          <Text style={styles.butText}>Update default values</Text>
-        </AwesomeButton>
+        <View style={{flexDirection:'row', marginTop: '30%'}}>
+          <AwesomeButton
+            onPress={() => onCalculatePress()}
+            style={styles.aweButL}>
+            <Icon1 name='calculator' color='#E73137' size={27} style={{ margin: '8%' }} />
+            <Text style={styles.butText1}>Calculate</Text>
+          </AwesomeButton>
+          <AwesomeButton
+            onPress={() => updateDefaultValues()}
+            style={styles.aweButR}>
+            <Text style={styles.butText}>Update default values</Text>
+          </AwesomeButton>
+        </View>
       </View></ScrollView>)
   }
 }
