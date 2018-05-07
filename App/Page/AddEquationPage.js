@@ -1,6 +1,10 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, Button, StyleSheet, AsyncStorage} from "react-native";
+import { View, Text, TextInput, Button, StyleSheet} from "react-native";
 import { StackNavigator } from 'react-navigation';
+import {Hoshi} from 'react-native-textinput-effects';
+import AwesomeButton from 'react-native-really-awesome-button';
+import Icon1 from 'react-native-vector-icons/FontAwesome';
+
 
 export default class AddEquationPage extends Component {
 
@@ -77,63 +81,45 @@ export default class AddEquationPage extends Component {
       expressions: parsedEquation["expressions"]
     };
     this.setState({equation: equationObject});
-    this.storeNewEquation();
   }
-  
 
   render() {
     return (
       <View>
         <Text style = {styles.title}>Add Equation</Text>
-        <TextInput
-          placeholder = 'Equation name'
-          style = {styles.input}
+        <Hoshi
+          label = 'Equation name'
+          borderColor = {'#E73137'}
+          labelStyle={{color : '#0C3F7D'}}
+          //inputStyle={{color : '#B7B9B8'}}
+          style={styles.input}
           onChangeText = {(text) => this.setState({equationTitle: text})}>
-        </TextInput>
-        <TextInput
-          placeholder = 'Equation description'
-          style = {styles.input}
+        </Hoshi>
+        <Hoshi
+          label = 'Equation description'
+          borderColor = {'#E73137'}
+          labelStyle={{color : '#0C3F7D'}}
+          style={styles.input}
           onChangeText = {(text) => this.setState({equationDescription: text})}>
-        </TextInput>
-        <TextInput
-          placeholder = 'Ex: K=m*v'
-          style = {styles.input}
+        </Hoshi>
+        <Hoshi
+          label = 'Ex: K=m*v'
+          borderColor = {'#E73137'}
+          labelStyle={{color : '#0C3F7D'}}
+          style={styles.input}
           onChangeText = {(text) => this.setState({equationInput: text})}>
-        </TextInput>
+        </Hoshi>
         <Text
-          style = {{fontSize: 20, color: 'black'}} >
+          style = {{fontSize: 20, color: 'black', marginTop: 10}} >
           {JSON.stringify(this.state.equation)}
         </Text>
-        <Button
+        <AwesomeButton
           onPress = {this.submitEquationHandler}
-          title = "Submit"
-        />
+          style={{backgroundColor: '#B7B9B8', margin: '10%', marginLeft: '23%'}}>
+          <Icon1 name='cubes' color='#E73137' size={27}/>
+        </AwesomeButton>
       </View>
     );
-  }
-  async storeNewEquation() {
-    var added = [];
-    
-    try{
-      const value = await AsyncStorage.getItem('@MySuperStore:added');
-      if (value != null){
-         added = JSON.parse(value);
-         added.push(this.state.equation);
-      } else {
-        added.push(this.state.equation);
-      }
-    } catch (error) {
-      console.log("Something whent wrong when trying to fetch data");
-    }
-    // Store added equations  
-    try {
-      await AsyncStorage.setItem('@MySuperStore:added', JSON.stringify(added));
-      alert("success")
-      } catch (error) {
-        console.log("Fail to store new equation!")
-        alert("error")
-    }
-    return
   }
 
 }
@@ -141,21 +127,18 @@ export default class AddEquationPage extends Component {
   const styles = StyleSheet.create({
     input:
     {
-      backgroundColor:'#d3d6d4',
-      color:'#2d85dd',
-      height: 40,
-      padding: 10,
-      marginTop: 5,
-      marginBottom: 5,
+      //marginTop: 5,
+      //marginBottom: 5,
       marginLeft: 10,
       marginRight: 10
     },
     title:
     {
-      color: '#0C3F7D',
+      color: 'gray',
       textAlign: 'center',
-      fontSize: 30,
       marginTop: 20,
-      marginBottom: 20
+      marginBottom: 20,
+      fontSize: 18,
+      fontWeight: "500",
     }
   });
