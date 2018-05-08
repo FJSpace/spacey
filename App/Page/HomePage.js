@@ -41,47 +41,37 @@ export default class HomePage extends React.Component {
   }
 
   async getStorage() {
-    var addedEq = [];
-    var newEq = {};
-    var allEq = this.state.equations;
+    var eqLength = this.state.equations.length;
+    var order = [];
     
-    for(let i = 0; i < allEq.length; i++){
+    try {
+      const value = await AsyncStorage.getItem('@MySuperStore:equationOrder');
+      if (value != null){
+        order = JSON.parse(value)
+        console.log(order);
+        console.log('--------------------------------')
+      }
+    } catch (error) {
+      console.log('ERROR!!!');// Array of keys, defaults
+    }
+    size = order.length;
+    for(let i = 0; i < size; i++){
       try{
-        const edited = await AsyncStorage.getItem('@MySuperStore:'+i);
-        if (edited != null){
-          allEq[i] = JSON.parse(edited);
-        } else {
-          allEq[i] = this.state.equations[i];
+        const value = await AsyncStorage.getItem('@MySuperStore:'+i);
+        if (value != null){
+          if(i < eqLength){
+            this.state.equations[i] = JSON.parse(value);
+          } else {
+            this.state.equations.push(JSON.parse(value))
+          }
+          console.log(value);
         }
       }catch (error) {
-        allEq[i] = this.state.equations[i];
-      }
-    }
-    
-    var size = this.state.equations.length;
-    try{
-      const added = await AsyncStorage.getItem('@MySuperStore:added');
-      if (added != null){
-        addedEq = JSON.parse(added);
-      }
-    } catch(error) {
-      console.log('Something whent wrong when trying to find added equations');
-    }
-    for(let i = 0; i < addedEq.length; i++){
-      newEq = addedEq[i];
-      if(newEq.id == null){
-        newEq.id = size + i;
-        allEq.push(newEq);
-        try {
-          await AsyncStorage.setItem('@MySuperStore:'+newEq.id, JSON.stringify(newEq));
-        } catch (error) {
-          console.log("Fail to store new equation!")
-          alert("error")
-        }
+        console.log('ERROR!!!');
       }
     }
     this.setState({
-      equations: allEq
+      equations: this.state.equations
     })
   }
 

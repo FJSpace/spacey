@@ -121,6 +121,36 @@ export default class AddEquationPage extends Component {
       </View>
     );
   }
+  
+  async storeNewEquation() {
+    var order = []
+    try {
+      const value = await AsyncStorage.getItem('@MySuperStore:equationOrder');
+      if (value != null){
+        order = JSON.parse(value)
+      }
+    } catch (error) {
+      console.log('ERROR!!!');// Array of keys, defaults
+    }
+    var size = order.length;
+    this.state.equation.id = size;
+    order.push(this.state.equation.id);
+    try {
+      await AsyncStorage.setItem('@MySuperStore:equationOrder', JSON.stringify(this.state.order));
+    } catch (error) {
+      console.log("Fail to store equation order!")
+    }
+    // Store added equations  
+    try {
+      await AsyncStorage.setItem('@MySuperStore:'+this.state.equation.id, JSON.stringify(this.state.equation));
+      alert("success")
+      } catch (error) {
+        console.log("Fail to store new equation!")
+        alert("error")
+    }
+    
+    return
+  }
 
 }
 
