@@ -1,40 +1,22 @@
 import React, { Component } from "react";
-import { View, Text, ActivityIndicator, Dimensions, StyleSheet, AsyncStorage, Button} from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, AsyncStorage } from "react-native";
+import { Icon } from "react-native-elements";
 import { StackNavigator } from 'react-navigation';
 import HomePageComponents from '../components/HomePageComponents.js';
 
-var height = Dimensions.get('window').height;
-
 export default class HomePage extends React.Component {
 
-  // To use local variables and functions, navigation.state has to be used.
-  static navigationOptions = ({ navigation }) => {
-      const { params = {} } = navigation.state;
-
-      return {
-        title: "Equations",
-        headerRight: <Button disabled={params.isSearching || false} title={params.buttonTitle || "Order"} onPress={() => params.editOrder()} color="#E73137" />
-      };
-  };
-
-  // Set a parameter in navigation as a function to be used in the header button.
-  componentWillMount() {
-	if(this.props.navigation)  
-		this.props.navigation.setParams({ editOrder: this._editOrder });
-  }
-
-  // This is neccaccary for the button in the header to be able to use the state variable.
-  _editOrder = () => {
-
-    // Set the button in the header.
-    if(!this.state.isOrder) {
-      this.props.navigation.setParams({ buttonTitle: "Done" });
-    } else {
-      this.props.navigation.setParams({ buttonTitle: null });
-    }
-
-    this.setState({ isOrder: !this.state.isOrder})
-  }
+  static navigationOptions = ({ navigation }) => ({
+    title: "Equations",
+    headerRight: (
+      <Icon
+        name='playlist-add'
+        onPress={() =>  navigation.navigate('AddEquation') }
+        color='#0C3F7D'
+        iconStyle={{paddingRight: 8}}
+      />
+    ),
+  });
 
   constructor(props) {
     super(props);
@@ -46,16 +28,61 @@ export default class HomePage extends React.Component {
       equations: equations,
       order: null,
       filterOrder: null,
-      isOrder: false,
       isSearching: false,
       isLoading: false,
       text: '',
     }
 
+    this.getStorage();
     // The order is stored in index.
     this.setOrder()
 
     this.c = new HomePageComponents()
+  }
+
+  async getStorage() {
+    var addedEq = [];
+    var newEq = {};
+    var allEq = this.state.equations;
+    
+    for(let i = 0; i < allEq.length; i++){
+      try{
+        const edited = await AsyncStorage.getItem('@MySuperStore:'+i);
+        if (edited != null){
+          allEq[i] = JSON.parse(edited);
+        } else {
+          allEq[i] = this.state.equations[i];
+        }
+      }catch (error) {
+        allEq[i] = this.state.equations[i];
+      }
+    }
+    
+    var size = this.state.equations.length;
+    try{
+      const added = await AsyncStorage.getItem('@MySuperStore:added');
+      if (added != null){
+        addedEq = JSON.parse(added);
+      }
+    } catch(error) {
+      console.log('Something whent wrong when trying to find added equations');
+    }
+    for(let i = 0; i < addedEq.length; i++){
+      newEq = addedEq[i];
+      if(newEq.id == null){
+        newEq.id = size + i;
+        allEq.push(newEq);
+        try {
+          await AsyncStorage.setItem('@MySuperStore:'+newEq.id, JSON.stringify(newEq));
+        } catch (error) {
+          console.log("Fail to store new equation!")
+          alert("error")
+        }
+      }
+    }
+    this.setState({
+      equations: allEq
+    })
   }
 
   // Fetch the order from the locale storage. If there is none there, use standard.
@@ -66,14 +93,11 @@ export default class HomePage extends React.Component {
       if (value != null){
         order = JSON.parse(value)
 
-        console.log(order.length)
-
         // Reset to default order if the equations are changed.
         if(order.length != Object.keys(this.state.equations).length) {
           order = Object.keys(this.state.equations)
         }
 
-        console.log(order.length)
       } else {
         order = Object.keys(this.state.equations) // Array of keys, defaults
       }
@@ -123,14 +147,10 @@ export default class HomePage extends React.Component {
 
     // If searching, then disable filters
     if(text) {
-      this.props.navigation.setParams({ isSearching: true});
-      this.props.navigation.setParams({ buttonTitle: null });
       this.setState({
         isSearching: true,
-        isOrder: false
       })
     } else {
-      this.props.navigation.setParams({ isSearching: false});
       this.setState({
         isSearching: false
       })
@@ -148,8 +168,8 @@ export default class HomePage extends React.Component {
 
     return (
       <View style={styles.MainContainer}>
-        {this.c.searchInput(this.state, this.SearchFilterFunction.bind(this), styles)}
-        {this.c.equationSortList(this.state, this.onRowMoved.bind(this), this.onItemPress.bind(this), styles)}
+        {this.c.searchInput(this.state, this.SearchFilterFunction.bind(this))}
+        {this.c.equationSortList(this.state, this.onRowMoved.bind(this), this.onItemPress.bind(this))}
       </View>
     );
   }
@@ -177,7 +197,6 @@ export default class HomePage extends React.Component {
 
 }
 
-
 const styles = StyleSheet.create({
   MainContainer : {
      justifyContent: 'center',
@@ -185,28 +204,9 @@ const styles = StyleSheet.create({
      margin: 7,
    },
 
-  listItemContainer: {
-    borderBottomWidth: 0
-  },
-
-  listTitle: {
-    fontSize: 30,
-    paddingTop: 10,
-    paddingBottom: 10
-  },
-
-  TextInputStyleClass :{
-   textAlign: 'center',
-   height: 40,
-   borderWidth: 1,
-   borderColor: '#009688',
-   borderRadius: 7 ,
-   backgroundColor : "#FFFFFF"
-  },
-
   StateLoading:{
-    flex: 1,
-    paddingTop: 20
-  }
+   flex: 1,
+   paddingTop: 20
+  },
 
 });

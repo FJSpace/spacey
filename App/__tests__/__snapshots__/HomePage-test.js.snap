@@ -220,7 +220,7 @@ exports[`renderers correctly 1`] = `
         },
       ]
     }
-    disableSorting={true}
+    disableSorting={false}
     onRowMoved={[Function]}
     order={null}
     renderRow={[Function]}

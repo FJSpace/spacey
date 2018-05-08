@@ -1,64 +1,45 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, Button, StyleSheet} from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, AsyncStorage} from "react-native";
+import CalculateEquations from "../components/DetailPage/DetailPageFunctionality";
+import DetailPageComponents from '../components/DetailPageComponents.js';
+import {Icon} from 'react-native-elements';
+
+/*TestComment*/
 
 export default class DetailPage extends React.Component {
 
   static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.title}`,
+      title: `${navigation.state.params.title}`,
   });
+
+  addToFavorites(){
+    try{
+       AsyncStorage.setItem('@MySuperStore: favid', JSON.stringify(this.equation.id));
+     }
+     catch(error){
+       alert("Fail")
+     }
+  }
 
   constructor(props) {
     super(props);
 
     this.equation = props.navigation.state.params.equation;
-
+    this.c = new DetailPageComponents();
     this.state={
       parameterArray: this.equation.parameters.map(a => a.value),
       parametersValidation: Array(this.equation.parameters.length).fill(""),
-      calculateResult: "Fill in values & calculate!"
+      calculateResult: ""
     }
+    f=null
   }
 
-  render() {
-
-    let payments = [];
-    for(let i = 0; i < this.equation.parameters.length; i++){
-      payments.push(
-        <View key={i}>
-          <Text>{this.equation.parameters[i].var}</Text>
-          <TextInput
-            style={ [
-              styles.equation,
-              {borderColor: (!this.state.parametersValidation[i] ? 'gray' : 'red')}
-            ]}
-            onChangeText={(text) => this.onParametersInput(i, text)}
-            value={this.state.parameterArray[i]}
-            keyboardType={'numeric'}
-          />
-          {!!this.state.parametersValidation[i] && (
-            <Text style={styles.validationTxtBox}>{this.state.parametersValidation[i]}</Text>
-          )}
-        </View>)
-    }
-
-    return (
+  render() {   
+    return(
       <View>
-        <Text>{this.equation.name}</Text>
-        <Text>{this.equation.description}</Text>
-        <Text>{this.equation.equation}</Text>
-
-        <View style={styles.equationParameters}>
-          {payments}
-        </View>
-
-        <Text>{this.state.calculateResult}</Text>
-
-        <Button
-          onPress={ () => this.onCalculatePress()}
-          title="Calculate"
-        />
-      </View>
-    )
+    {this.c.equationDisplay(this.state,this.equation, this.onParametersInput.bind(this),this.onCalculatePress.bind(this), this.updateDefaultValues.bind(this), styles, this.addToFavorites.bind(this) )}
+    </View>
+    );   
   }
 
   onParametersInput(index, text) {
@@ -81,9 +62,17 @@ export default class DetailPage extends React.Component {
   }
 
 
+ 
+  updateDefaultValues(){
+
+    var cd = new CalculateEquations();
+    cd.updateDefaultValues(this.equation, this.state.parameterArray);
+    return
+  }
+
   onCalculatePress() {
 
-    // Check for empty inputs.
+     // Check for empty inputs.
     if(this.checkEmptyInputs()) {
       console.log("Empty Inputs!")
       this.updateCalculateReulsts("Values in the input(s) is required.")
@@ -99,20 +88,11 @@ export default class DetailPage extends React.Component {
        return
     }
 
+    var cd = new CalculateEquations();
     let calculateResult = ""
+    calculateResult = cd.Calculate(this.state.parameterArray, this.equation);
 
-    // Loop through the parameters and add expression in between.
-    for(let i = 0; i < this.state.parameterArray.length; i++){
-      if(this.state.parameterArray.length == 1) { // One parameter
-        calculateResult += this.state.parameterArray[i] + this.equation.expressions[i]
-      } else if (i == this.state.parameterArray.length-1) { // Check if the last parameter, then don't add an expression
-        calculateResult += this.state.parameterArray[i]
-      } else {
-        calculateResult += this.state.parameterArray[i] + this.equation.expressions[i]
-      }
-    }
-
-    this.updateCalculateReulsts(eval(calculateResult))
+    this.updateCalculateReulsts(calculateResult)
   }
 
   updateCalculateReulsts(calculateResult) {
@@ -148,10 +128,13 @@ export default class DetailPage extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  equation:
+  textDesc:
   {
-    height: 40,
-    borderWidth: 1,
+    paddingHorizontal: 8,
+    fontSize: 18,
+    fontWeight: "500",
+    marginTop: '3%',
+    color: 'gray'
   },
   validationTxtBox:
   {
@@ -159,7 +142,84 @@ const styles = StyleSheet.create({
   },
   equationParameters:
   {
-    paddingVertical: 16,
-    paddingHorizontal: 8
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    marginTop: '3%'
   },
+  input:
+  {
+    marginTop: 3
+  },
+  label:
+  {
+    color: '#0C3F7D',
+    backgroundColor: '#B7B9B8'
+  },
+  istyle:
+  {
+    backgroundColor:'#d3d6d4',
+    color:'#2d85dd'
+  },
+  equationPa:
+  {
+    flexDirection: 'column'
+  },
+  aweButL:
+  {
+    alignSelf: 'center',
+    backgroundColor: '#B7B9B8',
+    marginBottom: 3,
+    marginTop: '8%',
+    width: 170,
+    marginLeft: '2%',
+    marginRight: '1%',
+    flex: 1
+  },
+  aweButR:
+  {
+    alignSelf: 'center',
+    backgroundColor: '#B7B9B8',
+    marginBottom: 3,
+    marginTop: '8%',
+    marginRight: '3%',
+    width: 170,
+    marginLeft: '1%',
+    flex: 1
+  },
+  butText1:
+  {
+    fontSize: 20,
+    color: '#0C3F7D',
+    margin: '8%',
+    marginLeft: '3%'
+  },
+  butText:
+  {
+    fontSize: 20,
+    color: '#0C3F7D',
+    margin: '8%'
+  },
+  res:
+  {
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    marginTop: '10%'
+  },
+  text:
+  {
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    marginTop: '3%'
+  },
+  formu:
+  {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#0C3F7D'
+  },
+  out:
+  {
+    fontSize: 16,
+    color: '#E73137'
+  }
 });
