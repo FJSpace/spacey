@@ -21,11 +21,8 @@ export default class HomePage extends React.Component {
   constructor(props) {
     super(props);
 
-    var customData = require('../Model/Equations.json')
-    const equations = customData["Equations"]
-
     this.state={
-      equations: equations,
+      equations: [],
       order: null,
       filterOrder: null,
       isSearching: false,
@@ -33,45 +30,48 @@ export default class HomePage extends React.Component {
       text: '',
     }
 
-    this.getStorage();
+    // Set the equations based on the JSON, edited and added equations.
+    this.setEquations();
+
     // The order is stored in index.
     this.setOrder()
 
     this.c = new HomePageComponents()
   }
 
-  async getStorage() {
-    var eqLength = this.state.equations.length;
-    var order = [];
-    
+  async setEquations() {
+    // JSON fetch.
+    var customData = require('../Model/Equations.json')
+    var equations = customData["Equations"]
+
+    // Fetch added equations.
     try {
-      const value = await AsyncStorage.getItem('@MySuperStore:equationOrder');
+      const value = await AsyncStorage.getItem('@MySuperStore:addedEquations');
       if (value != null){
-        order = JSON.parse(value)
-        console.log(order);
-        console.log('--------------------------------')
+        equations = equations.concat(JSON.parse(value))
+      } else {
+        console.log("No added equations.")
       }
     } catch (error) {
-      console.log('ERROR!!!');// Array of keys, defaults
+      console.log("No added equations.")
     }
-    size = order.length;
-    for(let i = 0; i < size; i++){
-      try{
-        const value = await AsyncStorage.getItem('@MySuperStore:'+i);
+
+
+    for(let i = 0; i < equations.length; i++) {
+      try {
+        const value = await AsyncStorage.getItem('@MySuperStore:'+this.state.equation.id);
         if (value != null){
-          if(i < eqLength){
-            this.state.equations[i] = JSON.parse(value);
-          } else {
-            this.state.equations.push(JSON.parse(value))
-          }
-          console.log(value);
+          equations[i] = value
+        } else {
+          console.log("No edited equations.")
         }
-      }catch (error) {
-        console.log('ERROR!!!');
+      } catch (error) {
+        //console.log("No edited equations.")
       }
     }
+
     this.setState({
-      equations: this.state.equations
+      equations: equations
     })
   }
 
@@ -99,6 +99,7 @@ export default class HomePage extends React.Component {
       order: order,
       filterOrder: order
     })
+
   }
 
   test(text) {

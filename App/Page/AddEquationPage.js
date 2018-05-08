@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TextInput, Button, StyleSheet} from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, AsyncStorage} from "react-native";
 import { StackNavigator } from 'react-navigation';
 import {Hoshi} from 'react-native-textinput-effects';
 import AwesomeButton from 'react-native-really-awesome-button';
@@ -81,6 +81,8 @@ export default class AddEquationPage extends Component {
       expressions: parsedEquation["expressions"]
     };
     this.setState({equation: equationObject});
+
+    this.storeNewEquation(equationObject)
   }
 
   render() {
@@ -121,54 +123,69 @@ export default class AddEquationPage extends Component {
       </View>
     );
   }
-  
-  async storeNewEquation() {
+
+  async storeNewEquation(equationObject) {
+    var addedEquations = []
     var order = []
+
+    // Fetch added equations.
+    try {
+      const value = await AsyncStorage.getItem('@MySuperStore:addedEquations');
+      if (value != null){
+        addedEquations = JSON.parse(value)
+      } else {
+        console.log("No added equations.")
+      }
+    } catch (error) {
+      console.log("No added equations.")
+    }
+
+    // Fetch Order.
     try {
       const value = await AsyncStorage.getItem('@MySuperStore:equationOrder');
       if (value != null){
         order = JSON.parse(value)
       }
     } catch (error) {
-      console.log('ERROR!!!');// Array of keys, defaults
+      console.log("Fail to fetch order.")
     }
-    var size = order.length;
-    this.state.equation.id = size;
-    order.push(this.state.equation.id);
+
+    // Add new id to the equation depending on the order length.
+    // Also update order list.
+    equationObject.id = order.length
+    addedEquations.push(equationObject)
+    order.push(order.length)
+
     try {
-      await AsyncStorage.setItem('@MySuperStore:equationOrder', JSON.stringify(this.state.order));
+      await AsyncStorage.setItem('@MySuperStore:addedEquations', JSON.stringify(addedEquations));
+    } catch (error) {
+      console.log("Fail to store added equation!")
+    }
+
+    try {
+      await AsyncStorage.setItem('@MySuperStore:equationOrder', JSON.stringify(order));
     } catch (error) {
       console.log("Fail to store equation order!")
     }
-    // Store added equations  
-    try {
-      await AsyncStorage.setItem('@MySuperStore:'+this.state.equation.id, JSON.stringify(this.state.equation));
-      alert("success")
-      } catch (error) {
-        console.log("Fail to store new equation!")
-        alert("error")
-    }
-    
-    return
   }
 
-}
+ }
 
-  const styles = StyleSheet.create({
-    input:
-    {
-      //marginTop: 5,
-      //marginBottom: 5,
-      marginLeft: 10,
-      marginRight: 10
-    },
-    title:
-    {
-      color: 'gray',
-      textAlign: 'center',
-      marginTop: 20,
-      marginBottom: 20,
-      fontSize: 18,
-      fontWeight: "500",
-    }
-  });
+const styles = StyleSheet.create({
+  input:
+  {
+    //marginTop: 5,
+    //marginBottom: 5,
+    marginLeft: 10,
+    marginRight: 10
+  },
+  title:
+  {
+    color: 'gray',
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+    fontSize: 18,
+    fontWeight: "500",
+  }
+});
