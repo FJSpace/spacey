@@ -16,6 +16,14 @@ export default class HomePage extends React.Component {
         iconStyle={{paddingRight: 8}}
       />
     ),
+    headerLeft: (
+      <Icon
+        name='delete-forever'
+        onPress={() =>  AsyncStorage.clear() }
+        color='#0C3F7D'
+        iconStyle={{paddingLeft: 8}}
+      />
+    ),
   });
 
   constructor(props) {
