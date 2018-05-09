@@ -62,7 +62,7 @@ export default class AddEquationPage extends Component {
           for (let i = 0; i < vars.length; i++){
             params.push({
               var: vars[i],
-              value: 0
+              value: '0'
             });
           }
           equationObject = {
@@ -84,7 +84,7 @@ export default class AddEquationPage extends Component {
         }
       }
     } else {
-      vars = res.split(/[\+\-\*\/]/);
+      vars = refinedEquation.split(/[\+\-\*\/]/);
       for (let i = 0; i < vars.length; i++){
         params.push({
           var: vars[i],
@@ -92,7 +92,7 @@ export default class AddEquationPage extends Component {
         });
       }
       equationObject = {
-        equation: 'X='+res,
+        equation: 'X='+refinedEquation,
         parameters: params
       }
     }
