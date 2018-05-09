@@ -6,8 +6,7 @@
     "equation": "p = m * v",
     "parameters": [
       {"var":"m", "value":"5"},
-      {"var":"v", "value":"5"}],
-    "expressions": ["*"]
+      {"var":"v", "value":"5"}]
   },
   "Empty":{
     "id": 0,
@@ -16,8 +15,7 @@
     "equation": "p = m * v",
     "parameters": [
       {"var":"m", "value":"5"},
-      {"var":"v", "value":""}],
-    "expressions": ["*"]
+      {"var":"v", "value":""}]
   },
   "Text":{
     "id": 0,
@@ -26,8 +24,7 @@
     "equation": "p = m * v",
     "parameters": [
       {"var":"m", "value":"5"},
-      {"var":"v", "value":"5..5"}],
-    "expressions": ["*"]
+      {"var":"v", "value":"5..5"}]
   },
   "Parsing": {
     "equation": "K=mv+mp*c-e/f",
@@ -37,8 +34,7 @@
       {"var": "c", "value": "0"},
       {"var": "e", "value": "0"},
       {"var": "f", "value": "0"}
-    ],
-    "expressions": ["+", "*", "-", "/"]
+    ]
   },
   "EasyParse": {"equation": "K=mv+mp*c-e/f"}
   }
