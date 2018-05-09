@@ -24,18 +24,80 @@ export default class AddEquationPage extends Component {
   }
 
   parseJSON = (equation) => {
-    const OPERANDS = ['+', '-', '*', '/'];
-    const equationObject = {
+    const OPERANDS = /[\+\-\*\/]/;
+    var equationObject = {
       equation: equation,
       parameters: [],
       expressions: []
     };
+    var errorObject = {
+      error: '',
+      message: ''
+    };
+    var vars = [];
+    var params = [];
 
     const refinedEquation = equation.replace(/\s/g,'');
 
     let looper = 0;
 
-    while(true) {
+    if (refinedEquation.includes("=")) { //Looking for equal sign(s)
+      var res = refinedEquation.split("=");
+      
+      if (res.length > 2) { //If length is greater then 2, then we have more then one equal sign
+        errorObject = {
+          error: 'yes',
+          message: 'Maximum 1 equal sign is allowed!'
+        }
+        return errorObject;
+      } else {
+        if ((res[0].match(OPERANDS) != null) && (res[1].match(OPERANDS) != null)) { //Can't handle equations with operands on both sides of the equal sign
+          errorObject = {
+            error: 'yes',
+            message: "Can't have operands on both side of the equal sign!"
+          }
+          return errorObject;
+        } else if (res[1].match(OPERANDS) != null) { //The equation is on the right hand side
+          vars = res[1].split(/[\+\-\*\/]/);
+          for (let i = 0; i < vars.length; i++){
+            params.push({
+              var: vars[i],
+              value: 0
+            });
+          }
+          equationObject = {
+            equation: refinedEquation,
+            parameters: params
+          }
+        } else { //The equation is on the left hand side
+          vars = res[0].split(/[\+\-\*\/]/);
+          for (let i = 0; i < vars.length; i++){
+            params.push({
+              var: vars[i],
+              value: 0
+            });
+          }
+          equationObject = {
+            equation: res[1]+'='+res[0],
+            parameters: params
+          }
+        }
+      }
+    } else {
+      vars = res.split(/[\+\-\*\/]/);
+      for (let i = 0; i < vars.length; i++){
+        params.push({
+          var: vars[i],
+          value: 0
+        });
+      }
+      equationObject = {
+        equation: 'X='+res,
+        parameters: params
+      }
+    }
+    return equationObject;
+    /*while(true) {
       if (refinedEquation[looper] === "=") {
         break;
       }
@@ -66,23 +128,27 @@ export default class AddEquationPage extends Component {
 
         equationObject.parameters.push({var: parameterArray.join(''), value: "0"});
       }
-    }
-    return equationObject;
+    }*/
+    
   }
 
   submitEquationHandler = () => {
     const equationString = this.state.equationInput;
     const parsedEquation = this.parseJSON(equationString);
-    const equationObject = {
-      name: this.state.equationTitle,
-      description: this.state.equationDescription,
-      equation: parsedEquation["equation"],
-      parameters: parsedEquation["parameters"],
-      expressions: parsedEquation["expressions"]
-    };
-    this.setState({equation: equationObject});
+    
+    if (parsedEquation.error === 'yes'){
+      this.setState({equation: parsedEquation});
+    } else {    
+      const equationObject = {
+        name: this.state.equationTitle,
+        description: this.state.equationDescription,
+        equation: parsedEquation["equation"],
+        parameters: parsedEquation["parameters"]
+      };
+      this.setState({equation: equationObject});
 
-    this.storeNewEquation(equationObject)
+      this.storeNewEquation(equationObject)
+    }
   }
 
   render() {
