@@ -36,5 +36,24 @@
       {"var": "f", "value": "0"}
     ]
   },
-  "EasyParse": {"equation": "K=mv+mp*c-e/f"}
+  "EasyParse": {
+    "equation": "K=mv+mp*c-e/f"
+  },
+  "Error": [
+    {"error": "yes",
+    "message": "Maximum 1 equal sign is allowed!"},
+    {"error": "yes",
+    "message": "Can't have operands on both side of the equal sign!"},
+    {"error": "yes",
+    "message": "Can only have one operand between variables!"}
+  ],
+  
+  "NoEqual": {
+  "name": "Momentum",
+  "description": "Calclate momentum",
+  "equation": "X=m*v",
+  "parameters": [
+    {"var":"m", "value":"0"},
+    {"var":"v", "value":"0"}]
   }
+}

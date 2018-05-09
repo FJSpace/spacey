@@ -59,36 +59,52 @@ export default class AddEquationPage extends Component {
           return errorObject;
         } else if (res[1].match(OPERANDS) != null) { //The equation is on the right hand side
           vars = res[1].split(/[\+\-\*\/]/);
-          for (let i = 0; i < vars.length; i++){
-            params.push({
-              var: vars[i],
-              value: '0'
-            });
-          }
-          equationObject = {
-            equation: refinedEquation,
-            parameters: params
+          if (vars.includes('')){
+            errorObject = {
+              error: 'yes',
+              message: "Can only have one operand between variables!"
+            }
+            return errorObject;
+          } else {
+            for (let i = 0; i < vars.length; i++){
+              params.push({
+                var: vars[i],
+                value: '0'
+              });
+            }
+            equationObject = {
+              equation: refinedEquation,
+              parameters: params
+            }
           }
         } else { //The equation is on the left hand side
           vars = res[0].split(/[\+\-\*\/]/);
-          for (let i = 0; i < vars.length; i++){
-            params.push({
-              var: vars[i],
-              value: 0
-            });
-          }
-          equationObject = {
-            equation: res[1]+'='+res[0],
-            parameters: params
+          if (vars.includes('')){
+            errorObject = {
+              error: 'yes',
+              message: "Can only have one operand between variables!"
+            }
+            return errorObject;
+          } else {
+            for (let i = 0; i < vars.length; i++){
+              params.push({
+                var: vars[i],
+                value: '0'
+              });
+            }
+            equationObject = {
+              equation: res[1]+'='+res[0],
+              parameters: params
+            }
           }
         }
       }
-    } else {
+    } else { // No equal sign
       vars = refinedEquation.split(/[\+\-\*\/]/);
       for (let i = 0; i < vars.length; i++){
         params.push({
           var: vars[i],
-          value: 0
+          value: '0'
         });
       }
       equationObject = {
@@ -137,7 +153,7 @@ export default class AddEquationPage extends Component {
     const parsedEquation = this.parseJSON(equationString);
     
     if (parsedEquation.error === 'yes'){
-      this.setState({equation: parsedEquation});
+      this.setState({equation: parsedEquation.message});
     } else {    
       const equationObject = {
         name: this.state.equationTitle,
