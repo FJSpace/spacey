@@ -30,16 +30,9 @@ export default class AddEquationPage extends Component {
       parameters: [],
       expressions: []
     };
-    var errorObject = {
-      error: '',
-      message: ''
-    };
-    var vars = [];
     var params = [];
 
     const refinedEquation = equation.replace(/\s/g,'');
-
-    let looper = 0;
 
     if (refinedEquation.includes("=")) { //Looking for equal sign(s)
       var res = refinedEquation.split("=");
@@ -58,40 +51,20 @@ export default class AddEquationPage extends Component {
           }
           return errorObject;
         } else if (res[1].match(OPERANDS) != null) { //The equation is on the right hand side
-          vars = res[1].split(/[\+\-\*\/]/);
-          if (vars.includes('')){
-            errorObject = {
-              error: 'yes',
-              message: "Can only have one operand between variables!"
-            }
-            return errorObject;
+          params = this.extractVariables(res[1]);
+          if (params.error === 'yes'){
+            return params;
           } else {
-            for (let i = 0; i < vars.length; i++){
-              params.push({
-                var: vars[i],
-                value: '0'
-              });
-            }
             equationObject = {
               equation: refinedEquation,
               parameters: params
             }
           }
         } else { //The equation is on the left hand side
-          vars = res[0].split(/[\+\-\*\/]/);
-          if (vars.includes('')){
-            errorObject = {
-              error: 'yes',
-              message: "Can only have one operand between variables!"
-            }
-            return errorObject;
+          params = this.extractVariables(res[0]);
+          if (params.error === 'yes'){
+            return params; 
           } else {
-            for (let i = 0; i < vars.length; i++){
-              params.push({
-                var: vars[i],
-                value: '0'
-              });
-            }
             equationObject = {
               equation: res[1]+'='+res[0],
               parameters: params
@@ -100,52 +73,41 @@ export default class AddEquationPage extends Component {
         }
       }
     } else { // No equal sign
-      vars = refinedEquation.split(/[\+\-\*\/]/);
-      for (let i = 0; i < vars.length; i++){
-        params.push({
-          var: vars[i],
-          value: '0'
-        });
-      }
-      equationObject = {
-        equation: 'X='+refinedEquation,
-        parameters: params
+      params = this.extractVariables(refinedEquation);
+      if (params.error === 'yes'){
+        return params; 
+      } else {
+        equationObject = {
+          equation: 'X='+refinedEquation,
+          parameters: params
+        }
       }
     }
     return equationObject;
-    /*while(true) {
-      if (refinedEquation[looper] === "=") {
-        break;
-      }
-      looper++;
-    }
-
-    for (let x = looper + 1; x < refinedEquation.length; x++) {
-      // if encounter an operand, add to the expression array in the equation object.
-      if (OPERANDS.includes(refinedEquation[x])) {
-        equationObject.expressions.push(refinedEquation[x]);
-      } else {
-        // else if encountering a letter, add to parameter array.
-        let parameterArray = [];
-
-        // while next character != operand, join characters to one single parameter.
-        while (true) {
-
-          if (OPERANDS.includes(refinedEquation[x])) {
-            x--;
-            break;
-          } else if (!refinedEquation[x]) {
-            break;
-          }
-
-          parameterArray.push(refinedEquation[x]);
-          x++;
-        }
-
-        equationObject.parameters.push({var: parameterArray.join(''), value: "0"});
-      }
-    }*/
     
+  }
+
+  extractVariables = (str) => {
+    var params = [];
+    var newstr = str.replace(/[()]/g, '');
+    var vars = newstr.split(/[\+\-\*\/]/);
+    if (vars.includes('')){
+      var errorObject = {
+        error: 'yes',
+        message: "Can only have one operand between variables!"
+      }
+      return errorObject;
+    } else {
+      for (let i = 0; i < vars.length; i++){
+        if (isNaN(vars[i])){ //isNan returns false if it is a number
+          params.push({
+            var: vars[i],
+            value: '0'
+          });
+        }
+      }
+    }
+    return params;
   }
 
   submitEquationHandler = () => {
