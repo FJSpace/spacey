@@ -55,5 +55,29 @@
   "parameters": [
     {"var":"m", "value":"0"},
     {"var":"v", "value":"0"}]
+  },
+  "Number": {
+  "name": "Momentum",
+  "description": "Calclate momentum",
+  "equation": "p=m*5",
+  "parameters": [
+    {"var":"m", "value":"0"}]
+  },
+  "Parentheses": {
+  "name": "Momentum",
+  "description": "Calclate momentum",
+  "equation": "p=m*(r-k)",
+  "parameters": [
+    {"var":"m", "value":"0"},
+    {"var":"r", "value":"0"},
+    {"var":"k", "value":"0"}]
+  },
+  "NumAndParentheses": {
+  "name": "Momentum",
+  "description": "Calclate momentum",
+  "equation": "p=m*(r-1)",
+  "parameters": [
+    {"var":"m", "value":"0"},
+    {"var":"r", "value":"0"}]
   }
 }
