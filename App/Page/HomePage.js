@@ -42,7 +42,7 @@ export default class HomePage extends React.Component {
     this.setEquations();
 
     // The order is stored in index.
-    this.setOrder()
+    //this.setOrder()
 
     this.c = new HomePageComponents()
   }
@@ -67,20 +67,21 @@ export default class HomePage extends React.Component {
 
     for(let i = 0; i < equations.length; i++) {
       try {
-        const value = await AsyncStorage.getItem('@MySuperStore:'+this.state.equation.id);
+        const value = await AsyncStorage.getItem('@MySuperStore:'+equations[i].id);
         if (value != null){
-          equations[i] = value
+          equations[i] = JSON.parse(value)
         } else {
-          console.log("No edited equations.")
+          //console.log("Id "+i+" hasn't been changed")
         }
       } catch (error) {
-        //console.log("No edited equations.")
+        console.log('ERROR: Somthing went wrong when fetching edited equations')
       }
     }
 
     this.setState({
       equations: equations
     })
+    this.setOrder()
   }
 
   // Fetch the order from the locale storage. If there is none there, use standard.
