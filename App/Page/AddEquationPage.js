@@ -21,6 +21,8 @@ export default class AddEquationPage extends Component {
       equation: {
       }
     };
+
+    console.log(this.props.navigation.state.params)
   }
 
   parseJSON = (equation) => {
@@ -36,7 +38,7 @@ export default class AddEquationPage extends Component {
 
     if (refinedEquation.includes("=")) { //Looking for equal sign(s)
       var res = refinedEquation.split("=");
-      
+
       if (res.length > 2) { //If length is greater then 2, then we have more then one equal sign
         errorObject = {
           error: 'yes',
@@ -63,7 +65,7 @@ export default class AddEquationPage extends Component {
         } else { //The equation is on the left hand side
           params = this.extractVariables(res[0]);
           if (params.error === 'yes'){
-            return params; 
+            return params;
           } else {
             equationObject = {
               equation: res[1]+'='+res[0],
@@ -75,7 +77,7 @@ export default class AddEquationPage extends Component {
     } else { // No equal sign
       params = this.extractVariables(refinedEquation);
       if (params.error === 'yes'){
-        return params; 
+        return params;
       } else {
         equationObject = {
           equation: 'X='+refinedEquation,
@@ -84,7 +86,7 @@ export default class AddEquationPage extends Component {
       }
     }
     return equationObject;
-    
+
   }
 
   extractVariables = (str) => {
@@ -113,10 +115,10 @@ export default class AddEquationPage extends Component {
   submitEquationHandler = () => {
     const equationString = this.state.equationInput;
     const parsedEquation = this.parseJSON(equationString);
-    
+
     if (parsedEquation.error === 'yes'){
       this.setState({equation: parsedEquation.message});
-    } else {    
+    } else {
       const equationObject = {
         name: this.state.equationTitle,
         description: this.state.equationDescription,
@@ -211,6 +213,9 @@ export default class AddEquationPage extends Component {
     } catch (error) {
       console.log("Fail to store equation order!")
     }
+
+    this.props.navigation.state.params.updateEquations()
+    this.props.navigation.goBack()
   }
 
  }

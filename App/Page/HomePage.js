@@ -6,25 +6,37 @@ import HomePageComponents from '../components/HomePageComponents.js';
 
 export default class HomePage extends React.Component {
 
-  static navigationOptions = ({ navigation }) => ({
-    title: "Equations",
-    headerRight: (
-      <Icon
-        name='playlist-add'
-        onPress={() =>  navigation.navigate('AddEquation') }
-        color='#0C3F7D'
-        iconStyle={{paddingRight: 8}}
-      />
-    ),
-    headerLeft: (
-      <Icon
-        name='delete-forever'
-        onPress={() =>  AsyncStorage.clear() }
-        color='#0C3F7D'
-        iconStyle={{paddingLeft: 8}}
-      />
-    ),
-  });
+  static navigationOptions = ({ navigation }) => {
+    const params = navigation.state.params || {};
+
+    return {
+      title: "Equations",
+      headerRight: (
+        <Icon
+          name='playlist-add'
+          onPress={() =>  navigation.navigate('AddEquation', {name: 'from parent', updateEquations: params.updateEquations} ) }
+          color='#0C3F7D'
+          iconStyle={{paddingRight: 8}}
+        />
+      ),
+      headerLeft: (
+        <Icon
+          name='delete-forever'
+          onPress={() =>  AsyncStorage.clear() }
+          color='#0C3F7D'
+          iconStyle={{paddingLeft: 8}}
+        />
+      )
+    }
+  };
+
+  componentWillMount() {
+    this.props.navigation.setParams({ updateEquations: this._updateEquations });
+  }
+
+  _updateEquations = () => {
+    this.setEquations()
+  }
 
   constructor(props) {
     super(props);
@@ -40,9 +52,6 @@ export default class HomePage extends React.Component {
 
     // Set the equations based on the JSON, edited and added equations.
     this.setEquations();
-
-    // The order is stored in index.
-    //this.setOrder()
 
     this.c = new HomePageComponents()
   }
