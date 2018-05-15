@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, ActivityIndicator, AsyncStorage } from "react-native";
 import { Icon } from "react-native-elements";
 import { StackNavigator } from 'react-navigation';
+import SegmentedControlTab from 'react-native-segmented-control-tab'
 import HomePageComponents from '../components/HomePageComponents.js';
 
 export default class HomePage extends React.Component {
@@ -44,14 +45,19 @@ export default class HomePage extends React.Component {
     this.state={
       equations: [],
       order: null,
+      favoriteOrder: [],
       filterOrder: null,
       isSearching: false,
       isLoading: false,
-      text: '',
+      text: ''
     }
+
+    this.selectedIndex = 0
 
     // Set the equations based on the JSON, edited and added equations.
     this.setEquations();
+    this.setFavoriteEquations();
+    this.setFavoriteEquations = this.setFavoriteEquations.bind(this)
 
     this.c = new HomePageComponents()
   }
@@ -120,13 +126,39 @@ export default class HomePage extends React.Component {
 
   }
 
+  async setFavoriteEquations() {
+    var favoriteEquations = []
+    try {
+      const value = await AsyncStorage.getItem('@MySuperStore:favoriteEquations');
+      if (value != null){
+        favoriteEquations = JSON.parse(value)
+      } else {
+        console.log("No favorite equations.")
+      }
+    } catch (error) {
+      console.log("No favorite equations.")
+    }
+
+    this.setState({
+      favoriteOrder: favoriteEquations
+    })
+
+    if (this.selectedIndex == 1) {
+      this.SearchFilterFunction(this.state.text)
+    }
+  }
+
   test(text) {
     SearchFilterFunction(text)
   }
 
-  SearchFilterFunction(text){
+  SearchFilterFunction(text) {
     const equations = this.state.equations
-    const order = this.state.order
+    var order = this.state.order
+
+    if(this.selectedIndex == 1) {
+      order = this.state.favoriteOrder
+    }
 
     // Filter the search text in the equation.
     var newData = equations.filter(function(item) {
@@ -164,7 +196,17 @@ export default class HomePage extends React.Component {
         isSearching: false
       })
     }
-}
+  }
+
+  handleIndexChange = (index) => {
+    var order = this.state.order
+    if (index == 1) {
+      order = this.state.favoriteOrder
+    }
+
+    this.selectedIndex = index
+    this.SearchFilterFunction(this.state.text)
+  }
 
   render() {
     if (this.state.isLoading) {
@@ -177,6 +219,17 @@ export default class HomePage extends React.Component {
 
     return (
       <View style={styles.MainContainer}>
+        <SegmentedControlTab
+            tabsContainerStyle={styles.tabsContainerStyle}
+            tabStyle={styles.tabStyle}
+            tabTextStyle={styles.tabTextStyle}
+            activeTabStyle={styles.activeTabStyle}
+            activeTabTextStyle={styles.activeTabTextStyle}
+            values={['All', 'Favorite']}
+            selectedIndex={this.selectedIndex}
+            onTabPress={this.handleIndexChange}
+            />
+
         {this.c.searchInput(this.state, this.SearchFilterFunction.bind(this))}
         {this.c.equationSortList(this.state, this.onRowMoved.bind(this), this.onItemPress.bind(this))}
       </View>
@@ -184,7 +237,7 @@ export default class HomePage extends React.Component {
   }
 
   onItemPress(equation) {
-    this.props.navigation.navigate('Detail', {title: equation.name, equation});
+    this.props.navigation.navigate('Detail', {title: equation.name, equation, updateFavorite: this.setFavoriteEquations});
   }
 
   async onRowMoved(e) {
@@ -207,10 +260,27 @@ export default class HomePage extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  tabsContainerStyle: {
+    paddingBottom: 4
+  },
+
+  tabStyle: {
+    borderColor: '#0C3F7D'
+  },
+  tabTextStyle: {
+    color: '#0C3F7D',
+    fontWeight: 'bold'
+  },
+  activeTabStyle: {
+    backgroundColor: '#0C3F7D'
+  },
+  activeTabTextStyle: {
+    fontWeight: 'bold'
+  },
+
   MainContainer : {
      justifyContent: 'center',
      flex:1,
-     margin: 7,
    },
 
   StateLoading:{

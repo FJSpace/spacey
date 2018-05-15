@@ -12,15 +12,6 @@ export default class DetailPage extends React.Component {
       title: `${navigation.state.params.title}`,
   });
 
-  addToFavorites(){
-    try{
-       AsyncStorage.setItem('@MySuperStore: favid', JSON.stringify(this.equation.id));
-     }
-     catch(error){
-       alert("Fail")
-     }
-  }
-
   constructor(props) {
     super(props);
 
@@ -34,12 +25,42 @@ export default class DetailPage extends React.Component {
     f=null
   }
 
-  render() {   
+  async addToFavorites(){
+    var favoriteEquations = []
+
+    // Fetch added equations.
+    try {
+      const value = await AsyncStorage.getItem('@MySuperStore:favoriteEquations');
+      if (value != null){
+        favoriteEquations = JSON.parse(value)
+      } else {
+        console.log("No favorite equations.")
+      }
+    } catch (error) {
+      console.log("No favorite equations.")
+    }
+
+    if (favoriteEquations.includes(this.equation.id)) {
+      favoriteEquations.splice(favoriteEquations.indexOf(this.equation.id), 1)
+    } else {
+      favoriteEquations.push(this.equation.id)
+    }
+
+    try {
+      await AsyncStorage.setItem('@MySuperStore:favoriteEquations', JSON.stringify(favoriteEquations));
+    } catch (error) {
+      console.log("Fail to store favorite equation!")
+    }
+
+    this.props.navigation.state.params.updateFavorite()
+  }
+
+  render() {
     return(
       <View>
     {this.c.equationDisplay(this.state,this.equation, this.onParametersInput.bind(this),this.onCalculatePress.bind(this), this.updateDefaultValues.bind(this), styles, this.addToFavorites.bind(this) )}
     </View>
-    );   
+    );
   }
 
   onParametersInput(index, text) {
@@ -62,7 +83,7 @@ export default class DetailPage extends React.Component {
   }
 
 
- 
+
   updateDefaultValues(){
 
     var cd = new CalculateEquations();
