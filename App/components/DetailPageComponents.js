@@ -38,7 +38,7 @@ export default class DetailPageComponents {
 
         <View style={styles.text}>
           <Text style={{flex:2}}>Fill in values & calculate!</Text>
-          <Icon onPress={() => addToFav()} name='favorite' color='#E73137' style={{flex:1}}/>
+          <Icon onPress={() => addToFav()} name={state.favoriteIcon} color='#E73137' style={{flex:1}}/>
         </View>
 
         <View style={styles.res}>

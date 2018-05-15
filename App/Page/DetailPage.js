@@ -20,13 +20,18 @@ export default class DetailPage extends React.Component {
     this.state={
       parameterArray: this.equation.parameters.map(a => a.value),
       parametersValidation: Array(this.equation.parameters.length).fill(""),
-      calculateResult: ""
+      calculateResult: "",
+      favoriteEquations: [],
+      favoriteIcon: 'favorite-border'
     }
     f=null
+
+    this.setFavorite()
   }
 
-  async addToFavorites(){
+  async setFavorite() {
     var favoriteEquations = []
+    var favoriteIcon = 'favorite-border'
 
     // Fetch added equations.
     try {
@@ -41,6 +46,20 @@ export default class DetailPage extends React.Component {
     }
 
     if (favoriteEquations.includes(this.equation.id)) {
+      isFavorite = true
+      favoriteIcon = 'favorite'
+    }
+
+    this.setState({
+      favoriteEquations: favoriteEquations,
+      favoriteIcon: favoriteIcon
+    })
+  }
+
+  async addToFavorites(){
+    var favoriteEquations = this.state.favoriteEquations
+
+    if (favoriteEquations.includes(this.equation.id)) {
       favoriteEquations.splice(favoriteEquations.indexOf(this.equation.id), 1)
     } else {
       favoriteEquations.push(this.equation.id)
@@ -52,6 +71,7 @@ export default class DetailPage extends React.Component {
       console.log("Fail to store favorite equation!")
     }
 
+    this.setFavorite()
     this.props.navigation.state.params.updateFavorite()
   }
 
