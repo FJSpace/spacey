@@ -14,6 +14,7 @@ export default class AddEquationPage extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       equationInput: '',
       equationTitle: '',
@@ -21,8 +22,6 @@ export default class AddEquationPage extends Component {
       equation: {
       }
     };
-
-    console.log(this.props.navigation.state.params)
   }
 
   parseJSON = (equation) => {
@@ -197,7 +196,7 @@ export default class AddEquationPage extends Component {
     equationObject.id = order.length
     addedEquations.push(equationObject)
     order.push(order.length)
-
+    
     try {
       await AsyncStorage.setItem('@MySuperStore:addedEquations', JSON.stringify(addedEquations));
     } catch (error) {
