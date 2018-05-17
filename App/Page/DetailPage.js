@@ -193,8 +193,7 @@ const styles = StyleSheet.create({
   },
   label:
   {
-    color: '#0C3F7D',
-    backgroundColor: '#B7B9B8'
+    color: '#0C3F7D'
   },
   istyle:
   {
@@ -208,24 +207,24 @@ const styles = StyleSheet.create({
   aweButL:
   {
     alignSelf: 'center',
-    backgroundColor: '#B7B9B8',
+    backgroundColor: '#0C3F7D',
     marginBottom: 3,
     marginTop: '8%',
-    width: 170,
     marginLeft: '2%',
     marginRight: '1%',
-    flex: 1
+    flex: 1,
+    borderRadius: 200
   },
   aweButR:
   {
     alignSelf: 'center',
-    backgroundColor: '#B7B9B8',
+    backgroundColor: '#0C3F7D',
     marginBottom: 3,
     marginTop: '8%',
     marginRight: '3%',
-    width: 170,
     marginLeft: '1%',
-    flex: 1
+    flex: 1,
+    borderRadius: 200
   },
   butText1:
   {
