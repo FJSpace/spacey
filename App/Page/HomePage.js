@@ -93,9 +93,10 @@ export default class HomePage extends React.Component {
       }
     }
 
-    this.setState({
+    await this.setState({
       equations: equations
     })
+
     this.setOrder()
   }
 
@@ -110,13 +111,15 @@ export default class HomePage extends React.Component {
         // Reset to default order if the equations are changed.
         if(order.length != Object.keys(this.state.equations).length) {
           order = Object.keys(this.state.equations)
+          this.updateOrderAsyncStorage(order)
         }
-
       } else {
         order = Object.keys(this.state.equations) // Array of keys, defaults
+        this.updateOrderAsyncStorage(order)
       }
     } catch (error) {
       order = Object.keys(this.state.equations) // Array of keys, defaults
+      this.updateOrderAsyncStorage(order)
     }
 
     this.setState({
@@ -124,6 +127,14 @@ export default class HomePage extends React.Component {
       filterOrder: order
     })
 
+  }
+
+  async updateOrderAsyncStorage(order) {
+    try {
+      await AsyncStorage.setItem('@MySuperStore:equationOrder', JSON.stringify(order));
+    } catch (error) {
+      console.log("Fail to store equation order!")
+    }
   }
 
   async setFavoriteEquations() {
@@ -139,7 +150,7 @@ export default class HomePage extends React.Component {
       console.log("No favorite equations.")
     }
 
-    this.setState({
+    await this.setState({
       favoriteOrder: favoriteEquations
     })
 
@@ -250,11 +261,7 @@ export default class HomePage extends React.Component {
     })
 
     // Store the order in local storage when row is moved.
-    try {
-      await AsyncStorage.setItem('@MySuperStore:equationOrder', JSON.stringify(this.state.order));
-    } catch (error) {
-      console.log("Fail to store equation order!")
-    }
+    this.updateOrderAsyncStorage(order)
   }
 
 }
