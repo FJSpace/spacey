@@ -12,15 +12,6 @@ export default class DetailPage extends React.Component {
       title: `${navigation.state.params.title}`,
   });
 
-  addToFavorites(){
-    try{
-       AsyncStorage.setItem('@MySuperStore: favid', JSON.stringify(this.equation.id));
-     }
-     catch(error){
-       alert("Fail")
-     }
-  }
-
   constructor(props) {
     super(props);
 
@@ -29,17 +20,67 @@ export default class DetailPage extends React.Component {
     this.state={
       parameterArray: this.equation.parameters.map(a => a.value),
       parametersValidation: Array(this.equation.parameters.length).fill(""),
-      calculateResult: ""
+      calculateResult: "",
+      favoriteEquations: [],
+      favoriteIcon: 'favorite-border'
     }
     f=null
+
+    this.setFavorite()
   }
 
-  render() {   
+  async setFavorite() {
+    var favoriteEquations = []
+    var favoriteIcon = 'favorite-border'
+
+    // Fetch added equations.
+    try {
+      const value = await AsyncStorage.getItem('@MySuperStore:favoriteEquations');
+      if (value != null){
+        favoriteEquations = JSON.parse(value)
+      } else {
+        console.log("No favorite equations.")
+      }
+    } catch (error) {
+      console.log("No favorite equations.")
+    }
+
+    if (favoriteEquations.includes(this.equation.id)) {
+      isFavorite = true
+      favoriteIcon = 'favorite'
+    }
+
+    this.setState({
+      favoriteEquations: favoriteEquations,
+      favoriteIcon: favoriteIcon
+    })
+  }
+
+  async addToFavorites(){
+    var favoriteEquations = this.state.favoriteEquations
+
+    if (favoriteEquations.includes(this.equation.id)) {
+      favoriteEquations.splice(favoriteEquations.indexOf(this.equation.id), 1)
+    } else {
+      favoriteEquations.push(this.equation.id)
+    }
+
+    try {
+      await AsyncStorage.setItem('@MySuperStore:favoriteEquations', JSON.stringify(favoriteEquations));
+    } catch (error) {
+      console.log("Fail to store favorite equation!")
+    }
+
+    this.setFavorite()
+    this.props.navigation.state.params.updateFavorite()
+  }
+
+  render() {
     return(
       <View>
     {this.c.equationDisplay(this.state,this.equation, this.onParametersInput.bind(this),this.onCalculatePress.bind(this), this.updateDefaultValues.bind(this), styles, this.addToFavorites.bind(this) )}
     </View>
-    );   
+    );
   }
 
   onParametersInput(index, text) {
@@ -62,7 +103,7 @@ export default class DetailPage extends React.Component {
   }
 
 
- 
+
   updateDefaultValues(){
 
     var cd = new CalculateEquations();
@@ -152,8 +193,7 @@ const styles = StyleSheet.create({
   },
   label:
   {
-    color: '#0C3F7D',
-    backgroundColor: '#B7B9B8'
+    color: '#0C3F7D'
   },
   istyle:
   {
@@ -167,24 +207,24 @@ const styles = StyleSheet.create({
   aweButL:
   {
     alignSelf: 'center',
-    backgroundColor: '#B7B9B8',
+    backgroundColor: '#0C3F7D',
     marginBottom: 3,
     marginTop: '8%',
-    width: 170,
     marginLeft: '2%',
     marginRight: '1%',
-    flex: 1
+    flex: 1,
+    borderRadius: 200
   },
   aweButR:
   {
     alignSelf: 'center',
-    backgroundColor: '#B7B9B8',
+    backgroundColor: '#0C3F7D',
     marginBottom: 3,
     marginTop: '8%',
     marginRight: '3%',
-    width: 170,
     marginLeft: '1%',
-    flex: 1
+    flex: 1,
+    borderRadius: 200
   },
   butText1:
   {

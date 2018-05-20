@@ -38,6 +38,7 @@
     "react-native-elements": "^0.19.1",
     "react-native-material-ripple": "^0.8.0",
     "react-native-really-awesome-button": "^0.8.3",
+    "react-native-segmented-control-tab": "^3.2.2",
     "react-native-sortable-listview": "^0.2.8",
     "react-native-textinput-effects": "^0.4.2",
     "react-native-vector-icons": "^4.6.0",

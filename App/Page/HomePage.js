@@ -2,87 +2,102 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, ActivityIndicator, AsyncStorage } from "react-native";
 import { Icon } from "react-native-elements";
 import { StackNavigator } from 'react-navigation';
+import SegmentedControlTab from 'react-native-segmented-control-tab'
 import HomePageComponents from '../components/HomePageComponents.js';
 
 export default class HomePage extends React.Component {
 
-  static navigationOptions = ({ navigation }) => ({
-    title: "Equations",
-    headerRight: (
-      <Icon
-        name='playlist-add'
-        onPress={() =>  navigation.navigate('AddEquation') }
-        color='#0C3F7D'
-        iconStyle={{paddingRight: 8}}
-      />
-    ),
-  });
+  static navigationOptions = ({ navigation }) => {
+    const params = navigation.state.params || {};
+
+    return {
+      title: "Equations",
+      headerRight: (
+        <Icon
+          name='playlist-add'
+          onPress={() =>  navigation.navigate('AddEquation', {name: 'from parent', updateEquations: params.updateEquations} ) }
+          color='#0C3F7D'
+          iconStyle={{paddingRight: 8}}
+        />
+      ),
+      headerLeft: (
+        <Icon
+          name='delete-forever'
+          onPress={() =>  AsyncStorage.clear() }
+          color='#0C3F7D'
+          iconStyle={{paddingLeft: 8}}
+        />
+      )
+    }
+  };
+
+  componentWillMount() {
+    this.props.navigation.setParams({ updateEquations: this._updateEquations });
+  }
+
+  _updateEquations = () => {
+    this.setEquations()
+  }
 
   constructor(props) {
     super(props);
 
-    var customData = require('../Model/Equations.json')
-    const equations = customData["Equations"]
-
     this.state={
-      equations: equations,
+      equations: [],
       order: null,
+      favoriteOrder: [],
       filterOrder: null,
       isSearching: false,
       isLoading: false,
-      text: '',
+      text: ''
     }
 
-    this.getStorage();
-    // The order is stored in index.
-    this.setOrder()
+    this.selectedIndex = 0
+
+    // Set the equations based on the JSON, edited and added equations.
+    this.setEquations();
+    this.setFavoriteEquations();
+    this.setFavoriteEquations = this.setFavoriteEquations.bind(this)
 
     this.c = new HomePageComponents()
   }
 
-  async getStorage() {
-    var addedEq = [];
-    var newEq = {};
-    var allEq = this.state.equations;
-    
-    for(let i = 0; i < allEq.length; i++){
-      try{
-        const edited = await AsyncStorage.getItem('@MySuperStore:'+i);
-        if (edited != null){
-          allEq[i] = JSON.parse(edited);
+  async setEquations() {
+    // JSON fetch.
+    var customData = require('../Model/Equations.json')
+    var equations = customData["Equations"]
+
+    // Fetch added equations.
+    try {
+      const value = await AsyncStorage.getItem('@MySuperStore:addedEquations');
+      if (value != null){
+        equations = equations.concat(JSON.parse(value))
+      } else {
+        console.log("No added equations.")
+      }
+    } catch (error) {
+      console.log("No added equations.")
+    }
+
+
+    for(let i = 0; i < equations.length; i++) {
+      try {
+        const value = await AsyncStorage.getItem('@MySuperStore:'+equations[i].id);
+        if (value != null){
+          equations[i] = JSON.parse(value)
         } else {
-          allEq[i] = this.state.equations[i];
+          //console.log("Id "+i+" hasn't been changed")
         }
-      }catch (error) {
-        allEq[i] = this.state.equations[i];
+      } catch (error) {
+        console.log('ERROR: Somthing went wrong when fetching edited equations')
       }
     }
-    
-    var size = this.state.equations.length;
-    try{
-      const added = await AsyncStorage.getItem('@MySuperStore:added');
-      if (added != null){
-        addedEq = JSON.parse(added);
-      }
-    } catch(error) {
-      console.log('Something whent wrong when trying to find added equations');
-    }
-    for(let i = 0; i < addedEq.length; i++){
-      newEq = addedEq[i];
-      if(newEq.id == null){
-        newEq.id = size + i;
-        allEq.push(newEq);
-        try {
-          await AsyncStorage.setItem('@MySuperStore:'+newEq.id, JSON.stringify(newEq));
-        } catch (error) {
-          console.log("Fail to store new equation!")
-          alert("error")
-        }
-      }
-    }
-    this.setState({
-      equations: allEq
+
+    await this.setState({
+      equations: equations
     })
+
+    this.setOrder()
   }
 
   // Fetch the order from the locale storage. If there is none there, use standard.
@@ -96,28 +111,65 @@ export default class HomePage extends React.Component {
         // Reset to default order if the equations are changed.
         if(order.length != Object.keys(this.state.equations).length) {
           order = Object.keys(this.state.equations)
+          this.updateOrderAsyncStorage(order)
         }
-
       } else {
         order = Object.keys(this.state.equations) // Array of keys, defaults
+        this.updateOrderAsyncStorage(order)
       }
     } catch (error) {
       order = Object.keys(this.state.equations) // Array of keys, defaults
+      this.updateOrderAsyncStorage(order)
     }
 
     this.setState({
       order: order,
       filterOrder: order
     })
+
+  }
+
+  async updateOrderAsyncStorage(order) {
+    try {
+      await AsyncStorage.setItem('@MySuperStore:equationOrder', JSON.stringify(order));
+    } catch (error) {
+      console.log("Fail to store equation order!")
+    }
+  }
+
+  async setFavoriteEquations() {
+    var favoriteEquations = []
+    try {
+      const value = await AsyncStorage.getItem('@MySuperStore:favoriteEquations');
+      if (value != null){
+        favoriteEquations = JSON.parse(value)
+      } else {
+        console.log("No favorite equations.")
+      }
+    } catch (error) {
+      console.log("No favorite equations.")
+    }
+
+    await this.setState({
+      favoriteOrder: favoriteEquations
+    })
+
+    if (this.selectedIndex == 1) {
+      this.SearchFilterFunction(this.state.text)
+    }
   }
 
   test(text) {
     SearchFilterFunction(text)
   }
 
-  SearchFilterFunction(text){
+  SearchFilterFunction(text) {
     const equations = this.state.equations
-    const order = this.state.order
+    var order = this.state.order
+
+    if(this.selectedIndex == 1) {
+      order = this.state.favoriteOrder
+    }
 
     // Filter the search text in the equation.
     var newData = equations.filter(function(item) {
@@ -155,7 +207,17 @@ export default class HomePage extends React.Component {
         isSearching: false
       })
     }
-}
+  }
+
+  handleIndexChange = (index) => {
+    var order = this.state.order
+    if (index == 1) {
+      order = this.state.favoriteOrder
+    }
+
+    this.selectedIndex = index
+    this.SearchFilterFunction(this.state.text)
+  }
 
   render() {
     if (this.state.isLoading) {
@@ -168,6 +230,17 @@ export default class HomePage extends React.Component {
 
     return (
       <View style={styles.MainContainer}>
+        <SegmentedControlTab
+            tabsContainerStyle={styles.tabsContainerStyle}
+            tabStyle={styles.tabStyle}
+            tabTextStyle={styles.tabTextStyle}
+            activeTabStyle={styles.activeTabStyle}
+            activeTabTextStyle={styles.activeTabTextStyle}
+            values={['All', 'Favorite']}
+            selectedIndex={this.selectedIndex}
+            onTabPress={this.handleIndexChange}
+            />
+
         {this.c.searchInput(this.state, this.SearchFilterFunction.bind(this))}
         {this.c.equationSortList(this.state, this.onRowMoved.bind(this), this.onItemPress.bind(this))}
       </View>
@@ -175,7 +248,7 @@ export default class HomePage extends React.Component {
   }
 
   onItemPress(equation) {
-    this.props.navigation.navigate('Detail', {title: equation.name, equation});
+    this.props.navigation.navigate('Detail', {title: equation.name, equation, updateFavorite: this.setFavoriteEquations});
   }
 
   async onRowMoved(e) {
@@ -188,20 +261,33 @@ export default class HomePage extends React.Component {
     })
 
     // Store the order in local storage when row is moved.
-    try {
-      await AsyncStorage.setItem('@MySuperStore:equationOrder', JSON.stringify(this.state.order));
-    } catch (error) {
-      console.log("Fail to store equation order!")
-    }
+    this.updateOrderAsyncStorage(order)
   }
 
 }
 
 const styles = StyleSheet.create({
+  tabsContainerStyle: {
+    paddingBottom: 4
+  },
+
+  tabStyle: {
+    borderColor: '#0C3F7D'
+  },
+  tabTextStyle: {
+    color: '#0C3F7D',
+    fontWeight: 'bold'
+  },
+  activeTabStyle: {
+    backgroundColor: '#0C3F7D'
+  },
+  activeTabTextStyle: {
+    fontWeight: 'bold'
+  },
+
   MainContainer : {
      justifyContent: 'center',
      flex:1,
-     margin: 7,
    },
 
   StateLoading:{
