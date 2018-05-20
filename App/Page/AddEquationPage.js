@@ -156,6 +156,10 @@ export default class AddEquationPage extends Component {
           style={styles.input}
           onChangeText = {(text) => this.setState({equationInput: text})}>
         </Hoshi>
+        <Text
+          style = {{fontSize: 20, color: 'red', marginTop: 10}} >
+          {JSON.stringify(this.state.equation)}
+        </Text>
         <AwesomeButton
           onPress = {this.submitEquationHandler}
           style={{backgroundColor: '#B7B9B8', margin: '10%', marginLeft: '23%'}}>
