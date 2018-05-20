@@ -38,7 +38,7 @@
       "equation": "Ve = G0 * ISP",
       "parameters": [
         {"var":"G0", "value":"9.81"},
-        {"var":"A", "value":"3600"}],
+        {"var":"ISP", "value":"3600"}],
       "expressions": ["*"]
     },
     {
