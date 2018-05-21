@@ -106,6 +106,20 @@ export default class DetailPage extends React.Component {
 
   updateDefaultValues(){
 
+    if(this.checkEmptyInputs()) {
+      console.log("Empty Inputs!")
+      this.updateCalculateReulsts("Values are Required to Update.")
+
+      return
+    }
+
+    // Check if the all the parameter validations are OK
+    if(this.state.parametersValidation.join('')) {
+       console.log("Validation not OK!")
+       this.updateCalculateReulsts("Input Only Numbers to Update.")
+
+       return
+    }
     var cd = new CalculateEquations();
     cd.updateDefaultValues(this.equation, this.state.parameterArray);
     return
@@ -116,7 +130,7 @@ export default class DetailPage extends React.Component {
      // Check for empty inputs.
     if(this.checkEmptyInputs()) {
       console.log("Empty Inputs!")
-      this.updateCalculateReulsts("Values in the input(s) is required.")
+      this.updateCalculateReulsts("Input Values are Required.")
 
       return
     }
@@ -124,7 +138,7 @@ export default class DetailPage extends React.Component {
     // Check if the all the parameter validations are OK
     if(this.state.parametersValidation.join('')) {
        console.log("Validation not OK!")
-       this.updateCalculateReulsts("Put it correct inputs.")
+       this.updateCalculateReulsts("Input Only Numbers.")
 
        return
     }
@@ -260,6 +274,7 @@ const styles = StyleSheet.create({
   out:
   {
     fontSize: 16,
+    fontWeight: 'bold',
     color: '#E73137'
   }
 });

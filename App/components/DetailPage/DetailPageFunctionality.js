@@ -24,10 +24,10 @@ export default class CalculateEquations extends React.Component {
       
       try {     
         await AsyncStorage.setItem('@MySuperStore:'+equation.id, JSON.stringify(equation));
-        alert("success")
+        alert("Updating New Default Values Succeeded")
         } catch (error) {
           console.log("Fail to store equation order!")
-          alert("error")
+          alert("Updating New Default Values Failed!")
         }
      return
   }
