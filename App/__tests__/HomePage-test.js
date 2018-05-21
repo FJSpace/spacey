@@ -8,11 +8,3 @@ import { StackNavigator } from 'react-navigation';
 test('works', () => {
   expect(1).toBe(1);
 });
-
-test('renderers correctly', () => {
-	const wrapper = shallow(
-      <HomePage />
-    );
-
-    expect(wrapper).toMatchSnapshot();
-});

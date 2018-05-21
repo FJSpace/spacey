@@ -1,3 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders without crashing 1`] = `<NavigationContainer />`;
+exports[`renders without crashing 1`] = `
+<AppLoading
+  onError={[Function]}
+  onFinish={[Function]}
+  startAsync={[Function]}
+/>
+`;
